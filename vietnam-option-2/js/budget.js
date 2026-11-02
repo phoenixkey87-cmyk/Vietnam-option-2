@@ -62,7 +62,7 @@
   }
 
   /* ---------- skeleton ---------- */
-  host.appendChild(el('p', { cls: 'notice', attrs: { role: 'note' }, text: 'Planning estimates only. Amounts marked Estimated are placeholders to edit, rows marked Pending confirmation start at $0 until you enter a quote, and nothing here is a booking or a price guarantee. Amounts are per person; the group total multiplies by the number of travellers.' }));
+  host.appendChild(el('p', { cls: 'notice', attrs: { role: 'note' }, text: 'Planning estimates only. Amounts marked Estimated are planning figures you can edit, rows marked Proposed start at $0 until you enter a quote, and nothing here is a booking or a price guarantee. Amounts are per person; the group total multiplies by the number of travellers.' }));
 
   var topRow = el('div', { cls: 'budget-top' });
   var travInput = el('input', { cls: 'select budget-input', attrs: { type: 'number', min: '1', step: '1', id: 'budTravellers', inputmode: 'numeric' } });
@@ -150,7 +150,7 @@
   var actions = el('div', { cls: 'accordion-tools' }, [
     el('button', { cls: 'btn btn-outline', text: 'Save budget', attrs: { type: 'button' }, on: { click: function () { persist(); msg.textContent = 'Budget saved on this device.'; } } }),
     el('button', { cls: 'btn btn-outline', text: 'Reset to defaults', attrs: { type: 'button' }, on: { click: function () {
-      state = defaults(); persist(); sync(); update(); msg.textContent = 'Budget reset to the default placeholders.'; } } }),
+      state = defaults(); persist(); sync(); update(); msg.textContent = 'Budget reset to the default figures.'; } } }),
     el('button', { cls: 'btn btn-outline', text: 'Export CSV', attrs: { type: 'button' }, on: { click: exportCsv } }),
     el('button', { cls: 'btn btn-outline', text: 'Print', attrs: { type: 'button' }, on: { click: function () { window.print(); } } })
   ]);
@@ -230,8 +230,8 @@
     fPer.textContent = money(fixed);
     fGrp.textContent = money(group);
     fVnd.textContent = vnd(group);
-    var pending = D.budget.filter(function (r) { return r.status === 'pending' && rowValues(r).total === 0; }).length;
-    summaryLive.textContent = 'Fixed total per person ' + money(fixed) + ', group of ' + state.travellers + ' ' + money(group) + ' (' + vnd(group) + '). ' + pending + ' rows are still Pending confirmation at $0, so the real total will be higher.';
+    var pending = D.budget.filter(function (r) { return r.status === 'proposed' && !r.excludeFromTotals && rowValues(r).total === 0; }).length;
+    summaryLive.textContent = 'Fixed total per person ' + money(fixed) + ', group of ' + state.travellers + ' ' + money(group) + ' (' + vnd(group) + '). ' + pending + ' rows are still at $0 until you add a quote, so the real total will be higher.';
     var h = hotelNights();
     Object.keys(calcRefs).forEach(function (id) {
       var p = state.picks[id], c = calcRefs[id];
@@ -240,7 +240,7 @@
     });
     var over = Object.keys(state.picks).filter(function (id) { return state.picks[id].nights > 0 && state.picks[id].rate > CAP; }).length;
     calcSummary.textContent = h.nights === 0
-      ? 'No hotels selected. The Hotels row uses its manual Estimated placeholder.'
+      ? 'No hotels selected. The Hotels row uses its manual Estimated figure.'
       : h.nights + ' nights selected, ' + money(h.total) + ' per person, average ' + money(h.total / h.nights) + ' per night' + (over ? '. ' + over + ' hotel(s) above the cap.' : ', within the cap.') + ' Stay length plan: Da Nang ' + ((DEF.hotelNights || {})['Da Nang'] || 3) + ' nights, Ho Chi Minh City ' + ((DEF.hotelNights || {})['Ho Chi Minh City'] || 5) + ' nights.';
     drawChart(items, fixed);
     persist();

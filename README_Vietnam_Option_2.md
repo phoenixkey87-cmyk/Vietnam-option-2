@@ -2,7 +2,7 @@
 
 A standalone luxury travel itinerary site for November 21-29, 2027 (Da Nang, then Ho Chi Minh City). The original itinerary (`vietnam_itinerary_site.html`) is untouched and linked from the nav, hero and footer.
 
-Everything on the site is a proposal. Nothing is booked. Items that could not be verified are labelled Estimated, Proposed or Pending confirmation.
+Everything on the site is a proposal. Nothing is booked. Figures taken from dated guides or listings are labelled Estimated, and plans are labelled Proposed. Fields with no published value are left out of the card.
 
 ## How to run
 
@@ -32,11 +32,11 @@ vietnam-option-2/
 
 ## Editing content
 
-Each file in `vietnam-option-2/js/data/` assigns a list to `window.VO2_DATA`: `itinerary`, `hotels`, `dining`, `nightlife`, `cafes`, `shopping`, `medical`, `mappoints`, `budget`, `credits`. Every record has `status` (verified, estimated, proposed or pending), `sourceUrl` and `checkedDate`. Set an unknown field to `null` and the page shows "Pending confirmation". When you verify something, update the value, set `status` to `verified`, and add the source and date. To add a photo, put it under `images/` and add a matching entry in `credits.js`.
+Each file in `vietnam-option-2/js/data/` assigns a list to `window.VO2_DATA`: `itinerary`, `hotels`, `dining`, `nightlife`, `cafes`, `shopping`, `medical`, `mappoints`, `budget`, `credits`. Every record has `status` (verified, estimated or proposed), `sourceUrl` and `checkedDate`. Set an unknown field to `null` and the page leaves that row out. When you verify something, update the value, set `status` to `verified`, and add the source and date. To add a photo, put it under `images/` and add a matching entry in `credits.js`.
 
 ## Booking, reservation and inquiry links
 
-Hotels, dining, nightlife and wellness records may carry a `bookingLinks` list. The renderer in `js/sections.js` turns each entry into a Book, Reserve or Inquire button, and shows a muted "Booking link pending verification" label when the list is empty or missing. Do not invent URLs, affiliate codes or prices.
+Hotels, dining, nightlife and wellness records may carry a `bookingLinks` list. The renderer in `js/sections.js` turns each entry into a Book, Reserve or Inquire button, and shows a short "reserve by contacting the venue" line when the list is empty or missing. `via` can also be `chat` (WhatsApp or Zalo), `maps` (Google Maps listing) or `social`. Do not invent URLs, affiliate codes or prices.
 
 ```
 bookingLinks: [

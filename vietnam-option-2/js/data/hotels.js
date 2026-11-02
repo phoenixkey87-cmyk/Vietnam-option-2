@@ -6,7 +6,7 @@ window.VO2_DATA = window.VO2_DATA || {};
 window.VO2_DATA.hotelsMeta = {
   capUsdPerNight: 170,
   nights: { "Da Nang": 3, "Ho Chi Minh City": 5 },
-  rateNote: "Planning rates are proposed placeholders under the USD 170 cap. Live rates for Nov 2027 were not available at research time. Confirm directly with each hotel.",
+  rateNote: "Planning rates are estimates under the USD 170 cap. Rates for Nov 2027 are confirmed at booking; use each hotel's booking links.",
   checkedDate: "2026-11-02"
 };
 window.VO2_DATA.hotels = [
@@ -17,7 +17,7 @@ window.VO2_DATA.hotels = [
     imageAlt: "Beachfront high-rise hotels along My Khe Beach in Da Nang",
     imageNote: "Area photo of hotels along My Khe Beach; not necessarily this hotel.",
     stars: 4, starsStatus: "reported", starsSource: "https://haian-beach-spa.hotelsdanang.com/",
-    starsNote: "4-star per a booking aggregator; not confirmed on the hotel's own site.",
+    starsNote: "4-star per a booking aggregator; the hotel's own site does not state a class.",
     address: "278 Vo Nguyen Giap, Da Nang", neighborhood: "My Khe Beach", beachfront: true, district1: false,
     amenities: ["Infinity rooftop pool", "Spa", "Poolside bar", "Restaurant (Ca Go, Vietnamese)", "Free bicycle rental"],
     pool: true, spa: true,
@@ -29,9 +29,9 @@ window.VO2_DATA.hotels = [
     ],
     rate: { planningUsd: 120, status: "proposed", note: "Proposed planning figure under the USD 170 cap; no live quote." },
     review: { score: 9.4, scale: 10, basis: "Booking.com location sub-score, not an overall score", source: "Booking.com", sourceUrl: "https://www.booking.com/hotel/vn/hai-an-beach-amp-spa.fr.html", date: "2026-11-02", status: "estimated" },
-    officialUrl: null, bookingUrl: null,
-    roomNote: "The earlier official-site link for this hotel led to a different hotel in Hanoi, so it was removed. The hotel's own Da Nang website is pending confirmation.",
+    officialUrl: "https://haianbeachhotelspa.com/", bookingUrl: null,
     bookingLinks: [
+      { kind: "inquire", via: "official", url: "https://haianbeachhotelspa.com/", check: "fetched", checkedDate: "2026-11-02", note: "Official HAIAN Beach Hotel Spa, Danang site." },
       { kind: "book", via: "ota", otaName: "Booking.com", url: "https://www.booking.com/hotel/vn/hai-an-beach-amp-spa.html", check: "unverified-by-bot", checkedDate: "2026-11-02", note: "Booking.com blocks automated checks. Search results show this page is HAIAN Beach Hotel & Spa, 278 Vo Nguyen Giap, Da Nang." }
     ]
   },
@@ -66,8 +66,8 @@ window.VO2_DATA.hotels = [
     image: "vietnam-option-2/images/hotels/my-khe-coastline.jpg",
     imageAlt: "The Da Nang coastline with sand and sea",
     imageNote: "Coastline photo for context; not this resort.",
-    stars: null, starsStatus: "pending", starsSource: null,
-    starsNote: "Star class not stated on the official page. Pending confirmation.",
+    stars: 5, starsStatus: "reported", starsSource: "https://fusionandvillas.5starhotels.in/",
+    starsNote: "5-star per booking aggregator listings; the official Fusion page does not state a star class.",
     address: "Along the coast between central Da Nang and Hoi An", neighborhood: "Non Nuoc coast (south of the city)", beachfront: true, district1: false,
     amenities: ["Wellness-inclusive concept (per official site)", "Daily yoga and meditation classes", "Spa (Maia Spa)", "Beach access"],
     pool: true, spa: true,
@@ -77,7 +77,7 @@ window.VO2_DATA.hotels = [
       { to: "Hoi An", value: "Between Da Nang and Hoi An", sourceUrl: "https://fusionresorts.com/danang/" }
     ],
     rate: { planningUsd: 150, status: "proposed", note: "Proposed planning figure; wellness-inclusive resort rates may approach the cap. Verify it fits USD 170." },
-    review: { score: null, scale: null, basis: null, source: null, sourceUrl: null, date: null, status: "pending" },
+    review: null,
     officialUrl: "https://fusionresorts.com/danang/", bookingUrl: null,
     bookingLinks: [
       { kind: "book", via: "official", url: "https://villasdanang.backhotelite.com/en/bookcore/availability/fhrvdang/2027-11-21/2027-11-24/", check: "fetched", checkedDate: "2026-11-02", datesIncluded: "2027-11-21 to 2027-11-24", note: "Booking engine linked from the official Fusion page. The date path format was confirmed from the engine's own redirect; it responded for the 2027 dates, but availability must be checked there." },
@@ -126,7 +126,7 @@ window.VO2_DATA.hotels = [
       { to: "Notre-Dame Cathedral Basilica", value: "About 800 m", sourceUrl: "https://www.booking.com/hotel/vn/silverland-benthanh.html" }
     ],
     rate: { planningUsd: 100, status: "proposed", note: "Proposed planning figure under the USD 170 cap; no live quote." },
-    review: { score: null, scale: null, basis: null, source: null, sourceUrl: null, date: null, status: "pending" },
+    review: null,
     officialUrl: "https://silverlandhotels.com/", bookingUrl: null,
     bookingLinks: [
       { kind: "book", via: "ota", otaName: "Booking.com", url: "https://www.booking.com/hotel/vn/silverland-benthanh.html", check: "unverified-by-bot", checkedDate: "2026-11-02", note: "Booking.com blocks automated checks. Search results show this page is Silverland Ben Thanh, 1 minute from Ben Thanh Market. The group's own booking engine searches several Silverland hotels, so it is not linked." },

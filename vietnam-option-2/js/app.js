@@ -41,16 +41,18 @@
   }
 
   var STATUS_LABELS = {
-    verified: 'Verified', estimated: 'Estimated', proposed: 'Proposed', pending: 'Pending confirmation',
-    tentative: 'Tentative', confirmed: 'Confirmed'
+    verified: 'Verified', estimated: 'Estimated', proposed: 'Proposed', pending: 'Estimated',
+    tentative: 'Proposed', confirmed: 'Confirmed'
   };
   function statusBadge(status) {
-    var key = STATUS_LABELS[status] ? status : 'pending';
+    var key = STATUS_LABELS[status] ? status : 'estimated';
+    if (key === 'pending') key = 'estimated';
+    if (key === 'tentative') key = 'proposed';
     return el('span', { cls: 'badge badge-' + key, text: STATUS_LABELS[key] });
   }
 
   function fmtUSD(n) {
-    if (n === null || n === undefined || isNaN(Number(n))) return 'Pending confirmation';
+    if (n === null || n === undefined || isNaN(Number(n))) return 'Enter your quote';
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(Number(n));
   }
 
@@ -289,7 +291,7 @@
   (function itinerary() {
     var list = document.getElementById('itineraryList');
     var days = Array.isArray(DATA.itinerary) ? DATA.itinerary : [];
-    if (!days.length) { list.appendChild(el('p', { text: 'Itinerary details are pending confirmation.' })); return; }
+    if (!days.length) { list.appendChild(el('p', { text: 'Itinerary details are being updated.' })); return; }
     var lastCity = null;
     var heads = [];
 

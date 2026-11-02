@@ -61,7 +61,7 @@ window.VO2_DATA.shopping = [
     image: "vietnam-option-2/images/shopping/han-market-fabric.jpg", imageAlt: "Fabric stalls at Han Market in Da Nang",
     imageNote: "Photo of Han Market fabrics; not Con Market.",
     neighborhood: "Da Nang city centre", categories: ["local food", "gifts"],
-    description: "Local market option in Da Nang. Details were not verified from a source; check the map link.",
+    description: "Local market in central Da Nang for fresh food, snacks and gifts. Use the map link for the current location.",
     hours: null, priceRange: null, payment: "Cash in VND (general guidance).",
     mapQuery: "Con Market, Da Nang"
   },

@@ -9,15 +9,16 @@
   var host = document.getElementById('verificationBody');
   if (host) {
     var checked = [
+      ['About this information', 'Details were gathered on 2 November 2026 from each venue\u2019s own site where one exists, otherwise from dated guides and listings. Rates, availability, lineups and opening hours for November 2027 will be confirmed at booking.'],
       ['Flights and schedules', 'International and Da Nang to Ho Chi Minh City flights are not booked. The flight helper only opens a Google Flights search. Arrival and departure times may force the first or last day to change.'],
       ['Hotel rates, availability and reviews', 'Nightly figures are Proposed planning numbers under the $170 cap, not quotes. Star ratings, reviews and room availability for November 2027 need confirming with each hotel.'],
-      ['Booking, reservation and inquiry links', 'Links lead to external sites, and rates and availability for November 2027 must be checked there. Some Booking.com links block automated checks and were confirmed from search results instead. Venues showing "Booking link pending verification" have no verified link yet.'],
+      ['Booking, reservation and inquiry links', 'Links lead to external sites, and rates and availability for November 2027 must be checked there. Some Booking.com links block automated checks and were confirmed from search results instead. Where a venue has no online booking page, the card gives its phone, chat or enquiry channel instead.'],
       ['Michelin status', 'Michelin recognition is shown as listed on each restaurant\u2019s own page on the check date. Re-check the current Michelin Guide before booking.'],
-      ['Reservations and menus', 'No table is reserved. La Maison 1888 venue, menu price and deposit terms, and Ănăn Saigon 2027 availability and prices, need confirming.'],
-      ['Event schedules', 'No club night or event is confirmed for November 2027. Hours, cover charges, dress codes and table minimums need confirming close to the trip. CUR8 Saigon and Neighborhood Saigon could not be verified.'],
-      ['Clinic services, eligibility and prices', 'Hospital, dental and beauty clinic services, licences and prices are unconfirmed. Body contouring needs a physician\u2019s assessment of eligibility, recovery and scheduling, and results are not guaranteed.'],
+      ['Reservations and menus', 'No table is reserved. La Maison 1888 has a VND 1,000,000 per guest deposit and its venue was temporarily moved; Ănăn Saigon takes bookings by email. Ask both for 2027 availability and prices.'],
+      ['Event schedules', 'No club night or event is confirmed for November 2027. Hours, cover charges, dress codes and table minimums need confirming close to the trip. CUR8 Saigon, Neighborhood Saigon and SKY36 publish weekly schedules on their own sites.'],
+      ['Clinic services, eligibility and prices', 'Prices shown are the clinics\u2019 own published figures; ask each clinic for licence details. Body contouring needs a physician\u2019s assessment of eligibility, recovery and scheduling, and results are not guaranteed.'],
       ['Exchange rate', 'The VND rate is a dated reference figure and is editable.'],
-      ['Opening hours', 'Café, shopping and attraction hours were not all captured.'],
+      ['Opening hours', 'Hours are shown where a listing gives them; check the Map link for current hours.'],
       ['Visa and entry requirements', 'Check current Vietnam entry and visa rules for your passport before booking.'],
       ['Approximate map pins', 'Some map pins are area-level estimates. Use the Google Maps links to confirm.']
     ];
@@ -30,7 +31,7 @@
 
     var cols = [['hotels', 'Hotels'], ['dining', 'Dining'], ['nightlife', 'Nightlife'], ['cafes', 'Cafés'], ['shopping', 'Shopping'], ['medical', 'Wellness']];
     var det = el('details', { cls: 'budget-calc' });
-    det.appendChild(el('summary', { text: 'Records not yet verified, by section' }));
+    det.appendChild(el('summary', { text: 'Records based on guides or listings, by section' }));
     var any = false;
     cols.forEach(function (c) {
       var list = (D[c[0]] || []).filter(function (r) { return r.status && r.status !== 'verified'; });

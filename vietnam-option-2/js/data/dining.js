@@ -23,7 +23,7 @@ window.VO2_DATA.dining = [
       { kind: "reserve", via: "official", url: "https://www.danang.intercontinental.com/dining/la-maison-1888/", check: "fetched", checkedDate: "2026-11-02", note: "Resort dining page. It says reservations are recommended and a deposit link follows confirmation; it has no online booking form." },
       { kind: "inquire", via: "official", url: "https://www.danang.intercontinental.com/contact-us/", check: "fetched", checkedDate: "2026-11-02" }
     ],
-    reservationStatus: "pending", note: "Proposed for Nov 23, 2027, subject to reservation availability and budget. Nothing is booked."
+    reservationStatus: "proposed", note: "Proposed for Nov 23, 2027, subject to reservation availability and budget. Nothing is booked."
   },
   {
     id: "dine-anan-saigon", city: "Ho Chi Minh City", name: "Ănăn Saigon", featured: true, proposedDate: "2027-11-27",
@@ -46,7 +46,7 @@ window.VO2_DATA.dining = [
     ],
     reservationEmail: "hello@anansaigon.com",
     menuUrl: "https://helloanan.my.canva.site/anan-alacarte",
-    reservationStatus: "pending", note: "Proposed for Nov 27, 2027, subject to availability. The restaurant suggests booking about 2 weeks ahead; confirm whether 2027 dates are open."
+    reservationStatus: "proposed", note: "Proposed for Nov 27, 2027, subject to availability. The restaurant suggests booking about 2 weeks ahead; confirm whether 2027 dates are open."
   },
   {
     id: "dine-nen-danang", city: "Da Nang", name: "Nen Danang", featured: false,
@@ -59,7 +59,12 @@ window.VO2_DATA.dining = [
     michelin: { status: "verified", text: "Michelin Green Star holder (retained in the 2025 guide per Vietnamese tourism news).", sourceUrl: "https://guide.michelin.com/en/article/sustainable-gastronomy/nen-danang-vietnams-first-michelin-green-star", secondarySourceUrl: "https://en.nhandan.vn/michelin-guide-announces-viet-nams-top-restaurants-in-2025-post149076.html" },
     description: "Minimal, modern interior with theatrical lighting; one set menu revamped every six months (per Michelin Guide).",
     hours: null, dressCode: null, menu: null, priceEstimate: null,
-    reservationUrl: null, menuUrl: null, reservationStatus: "pending", note: "Alternative birthday-week dinner. Official reservation page not confirmed; check the Michelin listing."
+    reservationUrl: "https://restaurantnen.com/", menuUrl: null,
+    bookingLinks: [
+      { kind: "inquire", via: "official", url: "https://restaurantnen.com/", check: "fetched", checkedDate: "2026-11-02", note: "Official site of the N\u00e9n restaurant group. It has no online booking form; a phone of +84 84 714 8866 is listed by Falstaff. Reserve by phone or message." },
+      { kind: "inquire", via: "official", url: "https://guide.michelin.com/en/da-nang-region/da-nang_2984390/restaurant/nen-danang", check: "fetched", checkedDate: "2026-11-02", note: "Michelin Guide listing with address and contact details." }
+    ],
+    reservationStatus: "proposed", note: "Alternative birthday-week dinner. One set menu, revamped every six months, so the menu on Nov 2027 dates will differ from today\u0027s."
   },
   {
     id: "dine-waterfront-danang", city: "Da Nang", name: "Waterfront Danang Restaurant & Bar", featured: false,
@@ -76,7 +81,7 @@ window.VO2_DATA.dining = [
     reservationUrl: "https://waterfrontdanang.com/", menuUrl: null,
     bookingLinks: [
       { kind: "inquire", via: "official", url: "https://waterfrontdanang.com/contact/", check: "fetched", checkedDate: "2026-11-02" }
-    ], reservationStatus: "pending", note: "Casual-upscale option for cocktails and dinner by the river."
+    ], reservationStatus: "proposed", note: "Casual-upscale option for cocktails and dinner by the river."
   },
   {
     id: "dine-akuna", city: "Ho Chi Minh City", name: "AKUNA", featured: false,
@@ -92,7 +97,7 @@ window.VO2_DATA.dining = [
     reservationUrl: "https://akunarestaurant.com/", menuUrl: "https://akunarestaurant.com/menu/",
     bookingLinks: [
       { kind: "inquire", via: "official", url: "https://akunarestaurant.com/contact/", check: "fetched", checkedDate: "2026-11-02", note: "Official contact page with the restaurant hotline and opening hours." }
-    ], reservationStatus: "pending", note: "Michelin-starred alternative if Anan Saigon is full."
+    ], reservationStatus: "proposed", note: "Michelin-starred alternative if Anan Saigon is full."
   },
   {
     id: "dine-saigon-saigon-rooftop", city: "Ho Chi Minh City", name: "Saigon Saigon Rooftop Bar (Caravelle)", featured: false,
@@ -109,7 +114,7 @@ window.VO2_DATA.dining = [
     bookingLinks: [
       { kind: "inquire", via: "official", url: "https://www.caravellehotel.com/contact-us/", check: "fetched", checkedDate: "2026-11-02", note: "Caravelle Saigon hotel contact page; ask for Saigon Saigon Rooftop Bar." }
     ],
-    reservationStatus: "pending", note: "Reopening date comes from a single local guide; verify with the hotel."
+    reservationStatus: "proposed", note: "Reopening date comes from a single local guide; verify with the hotel."
   },
   {
     id: "dine-social-club-saigon", city: "Ho Chi Minh City", name: "Social Club Rooftop Bar (Hotel des Arts Saigon)", featured: false,
@@ -126,6 +131,6 @@ window.VO2_DATA.dining = [
     bookingLinks: [
       { kind: "reserve", via: "official", url: "https://www.hoteldesartssaigon.com/restaurants-bars/social-club-rooftop-bar/", check: "fetched", checkedDate: "2026-11-02", note: "Official bar page; it invites guests to reserve a table in advance and lists the contact details." }
     ],
-    reservationStatus: "pending", note: "Listed from a rooftop directory; confirm hours, dress code and booking with the hotel."
+    reservationStatus: "proposed", note: "Listed from a rooftop directory; confirm hours, dress code and booking with the hotel."
   }
 ];

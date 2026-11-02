@@ -1,5 +1,5 @@
 window.VO2_DATA = window.VO2_DATA || {};
-// Cafes. Opening hours are null (pending) because no official hours were verified.
+// Cafes. Opening hours are shown only where a listing gives them.
 // Photos are licensed Commons images that illustrate the drink or area; they are not photos of the named cafe unless the alt text says so.
 window.VO2_DATA.cafes = [
   {
@@ -40,22 +40,22 @@ window.VO2_DATA.cafes = [
     status: "estimated", sourceUrl: "https://e.vnexpress.net/news/places/new-york-times-recommends-hcmcs-finest-cafes-4721076.html", checkedDate: "2026-11-02",
     image: "vietnam-option-2/images/cafes/egg-coffee.jpg", imageAlt: "A cup of Vietnamese egg coffee with creamy foam",
     imageNote: "Egg coffee originates in Hanoi; this is an illustrative drink photo.",
-    neighborhood: "Ho Chi Minh City (address pending)", type: ["egg-coffee"],
+    neighborhood: "119/5 Yersin, Pham Ngu Lao Ward, District 1", type: ["egg-coffee"],
     signature: ["Egg coffee"],
     atmosphere: "Named in a list of Ho Chi Minh City cafes recommended by The New York Times (as reported by VnExpress).",
-    hours: null, route: null, routeOrder: null,
-    mapQuery: "Little Hanoi Egg Coffee Ho Chi Minh City", note: "Address not verified here; use the map link to find the current location."
+    hours: { text: "8:00 to 22:00 (4travel listing)", sourceUrl: "https://4travel.jp/os_shisetsu/10634719" }, route: null, routeOrder: null,
+    mapQuery: "Little HaNoi Egg Coffee 119/5 Yersin Pham Ngu Lao District 1 Ho Chi Minh City", note: "Down an alley off Yersin street, about 5 minutes on foot from Ben Thanh Market (Trip.com traveller post). A second branch is at 212 Le Lai."
   },
   {
     id: "cafe-xliii-danang", city: "Da Nang", name: "XLIII Specialty Coffee (43 Factory Coffee Roaster)",
     status: "estimated", sourceUrl: "https://travelness.com/best-cafes-in-da-nang", checkedDate: "2026-11-02",
     image: "vietnam-option-2/images/cafes/danang-cafe-phin.jpg", imageAlt: "A Vietnamese phin coffee cafe in Da Nang",
     imageNote: "Illustrative Da Nang cafe photo; not XLIII.",
-    neighborhood: "Da Nang (address pending)", type: ["specialty-coffee", "roaster"],
+    neighborhood: "Lot 422 Ngo Thi Si, Ngu Hanh Son", type: ["specialty-coffee", "roaster"],
     signature: ["Specialty single-origin coffee"],
     atmosphere: "Celebrated among specialty coffee fans; the roaster was renamed XLIII per Da Nang guides.",
     hours: null, route: "danang", routeOrder: 1,
-    mapQuery: "XLIII Specialty Coffee 43 Factory Coffee Roaster Da Nang", note: "Confirm the current name and location on the map before going."
+    mapQuery: "XLIII Coffee Lot 422 Ngo Thi Si Ngu Hanh Son Da Nang", note: "Address from the roaster\u0027s own site (xliiicoffee.com). Open-plan glass-fronted shop near the beach."
   },
   {
     id: "cafe-a-la-carte-danang", city: "Da Nang", name: "A La Carte rooftop cafe",
@@ -65,19 +65,19 @@ window.VO2_DATA.cafes = [
     neighborhood: "My Khe Beach", type: ["rooftop", "beach-views"],
     signature: ["Coffee with My Khe Beach views"],
     atmosphere: "Top floor of the A La Carte hotel with panoramic views of My Khe Beach (guide description).",
-    hours: null, route: "danang", routeOrder: 2,
-    mapQuery: "A La Carte Danang Beach rooftop cafe, Da Nang", note: "Hotel rooftop; confirm it is open to non-guests."
+    hours: { text: "Rooftop bar listed 6:00 PM to 11:00 PM", sourceUrl: "https://danangfantasticity.com/en/la-carte-rooftop-bar" }, route: "danang", routeOrder: 2,
+    mapQuery: "A La Carte Danang Beach rooftop cafe, Da Nang", note: "Rooftop of the A La Carte Da Nang Beach hotel, 200 Vo Nguyen Giap; listed as a public rooftop bar on the Da Nang tourism portal."
   },
   {
     id: "cafe-hoi-an-ancient-town", city: "Da Nang", name: "Hoi An cafes (optional day-trip idea)",
     status: "proposed", sourceUrl: null, checkedDate: "2026-11-02",
     image: "vietnam-option-2/images/cafes/hoi-an-cafe.jpg", imageAlt: "A cafe in Hoi An, Vietnam",
     imageNote: "Photo of a Hoi An cafe (Cafe 96).",
-    neighborhood: "Hoi An (south of Da Nang; travel time not verified here)", type: ["garden", "heritage"],
+    neighborhood: "Hoi An (south of Da Nang)", type: ["garden", "heritage"],
     signature: ["Coffee in heritage buildings"],
     atmosphere: "Optional extra; not in the base itinerary.",
     hours: null, route: null, routeOrder: null,
-    mapQuery: "Hoi An Ancient Town cafes", note: "Proposed only; travel time and plans not confirmed."
+    mapQuery: "Hoi An Ancient Town cafes", note: "Optional idea only; not part of the base plan. XLIII Coffee also has a Hoi An shop at 326 Ly Thuong Kiet."
   }
 ];
 window.VO2_DATA.cafeRoutes = [

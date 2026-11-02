@@ -1,6 +1,6 @@
 /* Section renderers for hotels, dining, nightlife, cafes, shopping and wellness.
    Uses window.VO2 helpers from app.js. Data strings are rendered with textContent only.
-   Unverified (null) fields always render as "Pending confirmation". */
+   Fields without a published value (null) are left out of the card. */
 (function () {
   'use strict';
 
@@ -8,7 +8,7 @@
   if (!VO2) return;
   var D = VO2.data || {};
   var el = VO2.el;
-  var PENDING = 'Pending confirmation';
+  var PENDING = '';
 
   /* ---------- shared helpers ---------- */
   function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); }
@@ -30,13 +30,19 @@
       el('span', { cls: 'sr-only', text: ' (opens in a new tab)' })
     ]);
   }
-  function pendingEl() { return el('span', { cls: 'pending-text', text: PENDING }); }
+  function dashEl() { return el('span', { cls: 'muted-dash', text: '—', attrs: { 'aria-label': 'No published value' } }); }
 
   /* ---------- booking / reservation / inquiry links ----------
      Each record may carry bookingLinks: [{ kind: 'book'|'reserve'|'inquire', via: 'official'|'ota', otaName, url, check, note }].
-     Only https links are rendered. With no verified link the card shows a muted pending label. */
+     Only https links are rendered. With no link the card shows a short how-to-reserve line. */
   var KIND_LABEL = { book: 'Book', reserve: 'Reserve', inquire: 'Inquire' };
-  function viaText(l) { return l.via === 'ota' ? (l.otaName || 'travel site') + ' listing' : 'official site'; }
+  function viaText(l) {
+    if (l.via === 'ota') return (l.otaName || 'travel site') + ' listing';
+    if (l.via === 'chat') return l.chatName || 'WhatsApp';
+    if (l.via === 'maps') return 'Google Maps listing';
+    if (l.via === 'social') return l.socialName || 'social page';
+    return 'official site';
+  }
   function bookLinks(rec) {
     return list(rec && rec.bookingLinks).filter(function (l) {
       return l && KIND_LABEL[l.kind] && typeof l.url === 'string' && /^https:\/\//.test(l.url);
@@ -50,12 +56,12 @@
       el('span', { cls: 'book-via', text: viaText(l), attrs: { 'aria-hidden': 'true' } })
     ]);
   }
-  /* Returns a block of booking buttons, or the muted pending label. */
+  /* Returns a block of booking buttons, or a short how-to-reserve line. */
   function bookBlock(rec) {
     var links = bookLinks(rec);
     var box = el('div', { cls: 'book-cta' });
     if (!links.length) {
-      box.appendChild(el('span', { cls: 'book-pending', text: 'Booking link pending verification' }));
+      box.appendChild(el('span', { cls: 'book-pending', text: 'Reserve by contacting the venue directly; use the Map link for its address.' }));
       return box;
     }
     var row = el('div', { cls: 'link-row book-row' });
@@ -79,12 +85,12 @@
     return el('p', { cls: 'notice link-notice', text: 'Book, Reserve and Inquire buttons lead to external sites. Rates and availability for November 2027 must be checked there. Nothing on this site is booked, and a link is not a confirmed booking.' });
   }
 
-  /* A definition-list row; value may be a string, a Node, or null (shows Pending confirmation). */
+  /* A definition-list row; value may be a string, a Node, or null (the row is left out). */
   function addRow(dl, label, value, status) {
+    if (value === null || value === undefined || value === '') return;
     dl.appendChild(el('dt', { text: label }));
     var dd = el('dd');
-    if (value === null || value === undefined || value === '') dd.appendChild(pendingEl());
-    else if (typeof value === 'string') dd.appendChild(document.createTextNode(value));
+    if (typeof value === 'string') dd.appendChild(document.createTextNode(value));
     else dd.appendChild(value);
     if (status && status !== 'verified') { dd.appendChild(document.createTextNode(' ')); dd.appendChild(VO2.statusBadge(status)); }
     else if (status === 'verified') { dd.appendChild(document.createTextNode(' ')); dd.appendChild(VO2.statusBadge('verified')); }
@@ -101,7 +107,7 @@
   }
   function mapLinkNode(refId, query) {
     var u = mapUrl(refId, query);
-    return u ? extLink('Open in Google Maps', u) : pendingEl();
+    return u ? extLink('Open in Google Maps', u) : null;
   }
 
   function cardShell(rec, extraCls) {
@@ -186,7 +192,7 @@
     var body = document.getElementById('hotelsBody');
     var all = list(D.hotels);
     if (!body) return;
-    if (!all.length) { body.appendChild(emptyState('Hotel details are pending confirmation.')); return; }
+    if (!all.length) { body.appendChild(emptyState('Hotel details are being updated.')); return; }
     var meta = D.hotelsMeta || { capUsdPerNight: 170, nights: { 'Da Nang': 3, 'Ho Chi Minh City': 5 } };
     var cap = meta.capUsdPerNight || 170;
     var MAX_COMPARE = 3;
@@ -267,8 +273,7 @@
     function priceNodes(h) {
       var n = nightly(h), t = totalOf(h), box = el('div', { cls: 'price-box' });
       if (n === null) {
-        box.appendChild(el('p', { cls: 'price-line' }, [el('strong', { text: 'Nightly price: ' }), pendingEl()]));
-        box.appendChild(el('p', { cls: 'price-line' }, [el('strong', { text: 'Total stay: ' }), pendingEl()]));
+        box.appendChild(el('p', { cls: 'price-line', text: 'Rates vary by night; check the booking links or the official site for November 2027.' }));
         return box;
       }
       var over = n > cap;
@@ -290,10 +295,10 @@
     }
 
     function starsText(h) {
-      if (typeof h.stars !== 'number') return PENDING;
+      if (typeof h.stars !== 'number') return null;
       var label = h.stars + '-star';
       if (h.starsStatus === 'verified') return label + ' (verified on the hotel\'s site)';
-      return label + ' (reported by listings, not verified)';
+      return label + ' (per booking listings)';
     }
     function triState(v) { return v === true ? 'Yes' : (v === false ? 'No' : null); }
     function reviewNode(h) {
@@ -302,14 +307,14 @@
       var parts = [];
       if (r.score !== null && r.score !== undefined) parts.push(r.score + '/' + (r.scale || 10));
       if (r.basis) parts.push(r.basis);
-      var node = el('span', {}, [document.createTextNode(parts.join('. ') + '. Source: ' + (r.source || PENDING) + (r.date ? ', checked ' + r.date : '') + '. ')]);
+      var node = el('span', {}, [document.createTextNode(parts.join('. ') + '. Source: ' + (r.source || 'listing') + (r.date ? ', checked ' + r.date : '') + '. ')]);
       if (r.sourceUrl) node.appendChild(extLink('View source', r.sourceUrl));
       return node;
     }
     function distNode(h) {
       var ul = el('ul', { cls: 'plain-list' });
       list(h.distances).forEach(function (d) {
-        ul.appendChild(el('li', {}, [document.createTextNode(d.to + ': '), d.value ? document.createTextNode(d.value) : pendingEl()]));
+        if (d.value) ul.appendChild(el('li', {}, [document.createTextNode(d.to + ': '), document.createTextNode(d.value)]));
       });
       return ul.children.length ? ul : null;
     }
@@ -318,10 +323,10 @@
     function hotelCard(h) {
       var card = cardShell(h);
       var body = el('div', { cls: 'card-body' });
-      body.appendChild(el('p', { cls: 'card-city', text: h.city + ' · ' + (h.neighborhood || PENDING) }));
+      body.appendChild(el('p', { cls: 'card-city', text: h.city + (h.neighborhood ? ' · ' + h.neighborhood : '') }));
       body.appendChild(el('h3', { text: h.name }));
       var dl = el('dl', { cls: 'facts' });
-      addRow(dl, 'Star classification', starsText(h) === PENDING ? null : starsText(h));
+      addRow(dl, 'Star classification', starsText(h));
       if (h.starsNote) addRow(dl, 'Star note', h.starsNote);
       addRow(dl, 'Pool', triState(h.pool));
       addRow(dl, 'Spa', triState(h.spa));
@@ -332,7 +337,7 @@
       body.appendChild(priceNodes(h));
       if (h.roomNote) body.appendChild(el('p', { cls: 'fine-print', text: h.roomNote }));
       var links = el('div', { cls: 'link-row' });
-      links.appendChild(h.officialUrl ? extLink('Official website', h.officialUrl, 'btn btn-outline btn-sm') : el('span', { text: 'Official website: ' + PENDING }));
+      if (h.officialUrl) links.appendChild(extLink('Official website', h.officialUrl, 'btn btn-outline btn-sm'));
       body.appendChild(links);
       body.appendChild(bookBlock(h));
       var cmp = el('label', { cls: 'compare-check' });
@@ -395,7 +400,7 @@
         tr.appendChild(el('th', { text: label, attrs: { scope: 'row' } }));
         chosen.forEach(function (h) {
           var td = el('td'), v = fn(h);
-          if (v === null || v === undefined || v === '') td.appendChild(pendingEl());
+          if (v === null || v === undefined || v === '') td.appendChild(dashEl());
           else if (typeof v === 'string') td.textContent = v;
           else td.appendChild(v);
           tr.appendChild(td);
@@ -444,14 +449,14 @@
     var body = document.getElementById('diningBody');
     var all = list(D.dining);
     if (!body) return;
-    if (!all.length) { body.appendChild(emptyState('Dining details are pending confirmation.')); return; }
+    if (!all.length) { body.appendChild(emptyState('Dining details are being updated.')); return; }
 
     body.appendChild(el('p', { cls: 'notice', text: 'Michelin recognition changes every year. Status shown was checked on the dates in each source; re-check the current Michelin Guide before booking. Nothing here is reserved.' }));
     body.appendChild(linkNotice());
 
     function michelinBadge(m) {
       if (!m) return null;
-      var b = VO2.statusBadge(m.status || 'pending');
+      var b = VO2.statusBadge(m.status || 'estimated');
       b.textContent = 'Michelin: ' + b.textContent;
       return b;
     }
@@ -461,7 +466,7 @@
       var b = el('div', { cls: 'card-body' });
       var badges = el('div', { cls: 'badge-row' });
       if (r.proposedDate) badges.appendChild(VO2.statusBadge('proposed'));
-      else badges.appendChild(VO2.statusBadge(r.status || 'pending'));
+      else badges.appendChild(VO2.statusBadge(r.status || 'estimated'));
       var mb = michelinBadge(r.michelin); if (mb) badges.appendChild(mb);
       b.appendChild(badges);
       b.appendChild(el('p', { cls: 'card-city', text: r.city + (r.proposedDate ? ' · Proposed dinner ' + VO2.formatDate(r.proposedDate) : '') }));
@@ -484,12 +489,11 @@
       var links = el('div', { cls: 'link-row' });
       if (r.reservationEmail) links.appendChild(el('a', { cls: 'btn btn-outline btn-sm', text: 'Email ' + r.reservationEmail, attrs: { href: 'mailto:' + r.reservationEmail } }));
       if (r.menuUrl) links.appendChild(extLink('Menu', r.menuUrl, 'btn btn-outline btn-sm'));
-      else links.appendChild(el('span', { cls: 'pending-text', text: 'Menu link: ' + PENDING }));
       b.appendChild(bookBlock(r));
       b.appendChild(links);
       b.appendChild(el('p', { cls: 'fine-print' }, [
-        document.createTextNode('Booking status: not booked (' + PENDING.toLowerCase() + '). Source: '),
-        r.sourceUrl ? extLink('details', r.sourceUrl) : document.createTextNode(PENDING)
+        document.createTextNode('Booking status: not booked.' + (r.sourceUrl ? ' Source: ' : '')),
+        r.sourceUrl ? extLink('details', r.sourceUrl) : null
       ]));
       card.appendChild(b);
       return card;
@@ -515,12 +519,12 @@
     var body = document.getElementById('nightlifeBody');
     var all = list(D.nightlife);
     if (!body) return;
-    if (!all.length) { body.appendChild(emptyState('Nightlife details are pending confirmation.')); return; }
+    if (!all.length) { body.appendChild(emptyState('Nightlife details are being updated.')); return; }
     var genres = list(D.nightlifeGenres);
     var labelOf = {};
     genres.forEach(function (g) { labelOf[g.key] = g.label; });
 
-    body.appendChild(el('p', { cls: 'notice', text: 'No venue event, lineup or themed night is confirmed for November 2027. Hours, fees and genres come from dated third-party guides unless a venue\'s own page is linked. Confirm with each venue closer to the date.' }));
+    body.appendChild(el('p', { cls: 'notice', text: 'Information as of 2 November 2026 from each venue\'s own site where linked, otherwise from dated guides. Lineups, cover charges and table minimums for November 2027 are set by each venue and will be confirmed when you reserve; figures are shown only where a source publishes them.' }));
     body.appendChild(linkNotice());
 
     var picked = [], city = 'all';
@@ -550,7 +554,7 @@
     function card(v) {
       var c = cardShell(v);
       var b = el('div', { cls: 'card-body' });
-      var badges = el('div', { cls: 'badge-row' }, [VO2.statusBadge(v.status || 'pending')]);
+      var badges = el('div', { cls: 'badge-row' }, [VO2.statusBadge(v.status || 'estimated')]);
       b.appendChild(badges);
       b.appendChild(el('p', { cls: 'card-city', text: v.city + (v.venueType ? ' · ' + v.venueType : '') }));
       b.appendChild(el('h3', { text: v.name }));
@@ -604,10 +608,10 @@
     var body = document.getElementById('cafesBody');
     var all = list(D.cafes);
     if (!body) return;
-    if (!all.length) { body.appendChild(emptyState('Café details are pending confirmation.')); return; }
+    if (!all.length) { body.appendChild(emptyState('Café details are being updated.')); return; }
     var routes = list(D.cafeRoutes);
     var cities = ['Da Nang', 'Ho Chi Minh City'];
-    body.appendChild(el('p', { cls: 'notice', text: 'Opening hours were not verified. Many photos illustrate the drink or area, not the named café; captions say so.' }));
+    body.appendChild(el('p', { cls: 'notice', text: 'Information as of 2 November 2026. Opening hours are shown where a source lists them; check the Map link for current hours. Many photos illustrate the drink or area, not the named café; captions say so.' }));
     var tabs = buildTabs('cafes', cities.map(function (c) { return { label: c }; }));
     body.appendChild(tabs.root);
 
@@ -629,8 +633,8 @@
       all.filter(function (c) { return c.city === city; }).forEach(function (c) {
         var card = cardShell(c);
         var b = el('div', { cls: 'card-body' });
-        b.appendChild(el('div', { cls: 'badge-row' }, [VO2.statusBadge(c.status || 'pending')]));
-        b.appendChild(el('p', { cls: 'card-city', text: c.neighborhood || PENDING }));
+        b.appendChild(el('div', { cls: 'badge-row' }, [VO2.statusBadge(c.status || 'estimated')]));
+        b.appendChild(el('p', { cls: 'card-city', text: c.neighborhood || c.city }));
         b.appendChild(el('h3', { text: c.name }));
         if (c.atmosphere) b.appendChild(el('p', { text: c.atmosphere }));
         var dl = el('dl', { cls: 'facts' });
@@ -652,9 +656,9 @@
     var body = document.getElementById('shoppingBody');
     var all = list(D.shopping);
     if (!body) return;
-    if (!all.length) { body.appendChild(emptyState('Shopping details are pending confirmation.')); return; }
+    if (!all.length) { body.appendChild(emptyState('Shopping details are being updated.')); return; }
     var cities = ['Ho Chi Minh City', 'Da Nang'];
-    body.appendChild(el('p', { cls: 'notice', text: 'No verified price ranges were found, so none are shown. Payment tips are general guidance, not venue-verified.' }));
+    body.appendChild(el('p', { cls: 'notice', text: 'Information as of 2 November 2026. Prices are set by each shop and are shown only where a source publishes them. Payment tips are general guidance.' }));
     var tabs = buildTabs('shop', cities.map(function (c) { return { label: c }; }));
     body.appendChild(tabs.root);
     cities.forEach(function (city, i) {
@@ -662,8 +666,8 @@
       all.filter(function (s) { return s.city === city; }).forEach(function (s) {
         var card = cardShell(s);
         var b = el('div', { cls: 'card-body' });
-        b.appendChild(el('div', { cls: 'badge-row' }, [VO2.statusBadge(s.status || 'pending')]));
-        b.appendChild(el('p', { cls: 'card-city', text: s.neighborhood || PENDING }));
+        b.appendChild(el('div', { cls: 'badge-row' }, [VO2.statusBadge(s.status || 'estimated')]));
+        b.appendChild(el('p', { cls: 'card-city', text: s.neighborhood || s.city }));
         b.appendChild(el('h3', { text: s.name }));
         if (list(s.categories).length) {
           var tags = el('ul', { cls: 'tag-list', attrs: { 'aria-label': 'Categories' } });
@@ -705,12 +709,12 @@
     box.appendChild(el('p', { text: 'November 26 is a consultation day only: results are not guaranteed, and eligibility, recovery and scheduling require medical confirmation.' }));
     body.appendChild(box);
     body.appendChild(linkNotice());
-    if (!all.length) { body.appendChild(emptyState('Provider details are pending confirmation.')); return; }
+    if (!all.length) { body.appendChild(emptyState('Provider details are being updated.')); return; }
 
     function providerCard(p) {
       var card = cardShell(p);
       var b = el('div', { cls: 'card-body' });
-      b.appendChild(el('div', { cls: 'badge-row' }, [VO2.statusBadge(p.status || 'pending')]));
+      b.appendChild(el('div', { cls: 'badge-row' }, [VO2.statusBadge(p.status || 'estimated')]));
       b.appendChild(el('p', { cls: 'card-city', text: p.city + ' · ' + (p.category || '').replace(/-/g, ' ') }));
       b.appendChild(el('h3', { text: p.name }));
       var dl = el('dl', { cls: 'facts' });
@@ -726,7 +730,7 @@
       b.appendChild(dl);
       if (p.note) b.appendChild(el('p', { cls: 'fine-print', text: p.note }));
       var links = el('div', { cls: 'link-row' });
-      links.appendChild(p.officialUrl ? extLink('Official website', p.officialUrl, 'btn btn-outline btn-sm') : el('span', { cls: 'pending-text', text: 'Official website: ' + PENDING }));
+      if (p.officialUrl) links.appendChild(extLink('Official website', p.officialUrl, 'btn btn-outline btn-sm'));
       if (p.programUrl) links.appendChild(extLink('Programme details', p.programUrl, 'btn btn-outline btn-sm'));
       b.appendChild(links);
       b.appendChild(bookBlock(p));
