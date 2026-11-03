@@ -1,0 +1,32 @@
+{
+  "_comment": "TEST FIXTURE shaped like a SerpApi Google Flights response. Prices are fake and for tests only.",
+  "search_metadata": {
+    "status": "Success",
+    "google_flights_url": "https://www.google.com/travel/flights?hl=en&api_key=SECRETKEY123&tfs=abc"
+  },
+  "best_flights": [
+    {
+      "flights": [
+        {"airline": "TestAir", "travel_class": "Economy", "departure_airport": {"id": "STL"}, "arrival_airport": {"id": "ORD"}},
+        {"airline": "TestAir", "travel_class": "Economy", "departure_airport": {"id": "ORD"}, "arrival_airport": {"id": "ICN"}},
+        {"airline": "OtherAir", "travel_class": "Economy", "departure_airport": {"id": "ICN"}, "arrival_airport": {"id": "DAD"}}
+      ],
+      "layovers": [{"id": "ORD", "name": "O'Hare"}, {"id": "ICN", "name": "Incheon"}],
+      "total_duration": 1500,
+      "price": 1234,
+      "type": "Round trip"
+    }
+  ],
+  "other_flights": [
+    {
+      "flights": [{"airline": "CheapAir", "travel_class": "Economy"}, {"airline": "CheapAir", "travel_class": "Economy"}],
+      "layovers": [{"id": "SEA", "name": "Seattle"}],
+      "total_duration": 1700,
+      "price": 1111
+    },
+    {
+      "flights": [{"airline": "Lux", "travel_class": "Business"}],
+      "price": 500
+    }
+  ]
+}

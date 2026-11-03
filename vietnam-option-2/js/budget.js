@@ -10,6 +10,9 @@
   var KEY = 'vo2_budget';
   var COLORS = ['#0b4d3a', '#c9a24b', '#b76e79', '#2f6f5e', '#8a6d1f', '#3b3b3b', '#d9b8b0', '#5d8f7e', '#e3c374', '#7a3e48', '#1f7a62', '#a8a29a', '#6b5b2a', '#4c4c4c', '#9c6b73'];
   var CAP = DEF.hotelCapUsdPerNight || 170;
+  var HM = D.hotelsMeta || {};
+  var SOFT = Array.isArray(HM.softCapCities) ? HM.softCapCities : [];
+  var SHARE = DEF.sharedRoomGuests || (HM.sharedRoom && HM.sharedRoom.guests) || 2;
 
   function num(v, min) {
     var n = parseFloat(v);
@@ -20,7 +23,10 @@
     var rows = {};
     D.budget.forEach(function (r) { rows[r.id] = { qty: r.qty, unitUsd: r.unitUsd }; });
     var picks = {};
-    (D.hotels || []).forEach(function (h) { picks[h.id] = { nights: 0, rate: h.rate && h.rate.planningUsd != null ? h.rate.planningUsd : 0 }; });
+    (D.hotels || []).forEach(function (h) {
+      var rate = h.rate && h.rate.planningUsd != null ? h.rate.planningUsd : 0;
+      picks[h.id] = { nights: 0, rate: rate, guests: (rate > CAP && SOFT.indexOf(h.city) !== -1) ? SHARE : 1 };
+    });
     return { travellers: DEF.travellers || 1, rows: rows, picks: picks, vnd: FX.vndPerUsd || 0 };
   }
   var state = (function () {
@@ -35,7 +41,7 @@
     });
     Object.keys(base.picks).forEach(function (id) {
       var s = saved.picks && saved.picks[id];
-      if (s) base.picks[id] = { nights: Math.floor(num(s.nights)), rate: num(s.rate) };
+      if (s) base.picks[id] = { nights: Math.floor(num(s.nights)), rate: num(s.rate), guests: s.guests == null ? base.picks[id].guests : Math.min(4, Math.max(1, Math.floor(num(s.guests, 1)) || 1)) };
     });
     return base;
   })();
@@ -43,7 +49,7 @@
 
   function hotelNights() {
     var n = 0, t = 0;
-    Object.keys(state.picks).forEach(function (id) { n += state.picks[id].nights; t += state.picks[id].nights * state.picks[id].rate; });
+    Object.keys(state.picks).forEach(function (id) { n += state.picks[id].nights; t += state.picks[id].nights * state.picks[id].rate / state.picks[id].guests; });
     return { nights: n, total: t };
   }
   function rowValues(r) {
@@ -79,25 +85,27 @@
   /* hotel calculator */
   var calc = el('details', { cls: 'budget-calc', attrs: { open: '' } });
   calc.appendChild(el('summary', { text: 'Hotel calculator (feeds the Hotels row)' }));
-  calc.appendChild(el('p', { cls: 'small', text: 'Nightly rates start at the Proposed planning figures from the hotel section, which are not quotes. Enter nights per hotel and edit the rate once you have a real quote. Each night is compared with the $' + CAP + ' per room cap.' }));
+  calc.appendChild(el('p', { cls: 'small', text: 'Nightly rates start at the Proposed planning figures from the hotel section, which are not quotes. Enter nights per hotel and edit the rate once you have a real quote. Each night is compared with the $' + CAP + ' per room target. Da Nang beachfront hotels above it can be shared: set Guests sharing to 2 and the subtotal becomes your per-person cost.' }));
   var calcWrap = el('div', { cls: 'table-scroll' });
   var calcTable = el('table', { cls: 'compare-table' });
   calcTable.appendChild(el('caption', { cls: 'sr-only', text: 'Hotel nights and nightly rate' }));
   var ch = el('tr');
-  ['Hotel', 'Nights', 'Rate per night (USD)', 'Cap check', 'Subtotal'].forEach(function (t) { ch.appendChild(el('th', { text: t, attrs: { scope: 'col' } })); });
+  ['Hotel', 'Nights', 'Rate per room per night (USD)', 'Guests sharing the room', 'Budget check', 'Subtotal per person'].forEach(function (t) { ch.appendChild(el('th', { text: t, attrs: { scope: 'col' } })); });
   calcTable.appendChild(el('thead', null, [ch]));
   var calcBody = el('tbody');
   var calcRefs = {};
   (D.hotels || []).forEach(function (h) {
     var nI = el('input', { cls: 'select budget-input', attrs: { type: 'number', min: '0', step: '1', 'aria-label': 'Nights at ' + h.name } });
     var rI = el('input', { cls: 'select budget-input', attrs: { type: 'number', min: '0', step: '1', 'aria-label': 'Nightly rate at ' + h.name } });
+    var gI = el('input', { cls: 'select budget-input', attrs: { type: 'number', min: '1', max: '4', step: '1', 'aria-label': 'Guests sharing the room at ' + h.name } });
     var cap = el('td'), sub = el('td');
     nI.addEventListener('input', function () { state.picks[h.id].nights = Math.floor(num(nI.value)); update(); });
     rI.addEventListener('input', function () { state.picks[h.id].rate = num(rI.value); update(); });
-    calcRefs[h.id] = { n: nI, r: rI, cap: cap, sub: sub };
+    gI.addEventListener('input', function () { state.picks[h.id].guests = Math.min(4, Math.max(1, Math.floor(num(gI.value, 1)) || 1)); update(); });
+    calcRefs[h.id] = { n: nI, r: rI, g: gI, cap: cap, sub: sub };
     calcBody.appendChild(el('tr', null, [
       el('th', { text: h.name + ' (' + h.city + ')', attrs: { scope: 'row' } }),
-      el('td', null, [nI]), el('td', null, [rI]), cap, sub
+      el('td', null, [nI]), el('td', null, [rI]), el('td', null, [gI]), cap, sub
     ]));
   });
   calcTable.appendChild(calcBody);
@@ -212,7 +220,7 @@
     travInput.value = state.travellers;
     rateInput.value = state.vnd;
     D.budget.forEach(function (r) { rowRefs[r.id].q.value = state.rows[r.id].qty; rowRefs[r.id].u.value = state.rows[r.id].unitUsd; });
-    Object.keys(calcRefs).forEach(function (id) { calcRefs[id].n.value = state.picks[id].nights; calcRefs[id].r.value = state.picks[id].rate; });
+    Object.keys(calcRefs).forEach(function (id) { calcRefs[id].n.value = state.picks[id].nights; calcRefs[id].r.value = state.picks[id].rate; calcRefs[id].g.value = state.picks[id].guests; });
   }
   function update() {
     var fixed = 0, items = [], idx = 0;
@@ -235,13 +243,13 @@
     var h = hotelNights();
     Object.keys(calcRefs).forEach(function (id) {
       var p = state.picks[id], c = calcRefs[id];
-      c.cap.textContent = p.nights === 0 ? 'Not selected' : (p.rate > CAP ? 'Over the $' + CAP + ' cap' : 'Within the $' + CAP + ' cap');
-      c.sub.textContent = money(p.nights * p.rate);
+      c.cap.textContent = p.nights === 0 ? 'Not selected' : (p.rate <= CAP ? 'Within the $' + CAP + ' target' : (p.guests > 1 ? 'Shared by ' + p.guests + ': ' + money(p.rate / p.guests) + ' per person per night' : 'Over the $' + CAP + ' target'));
+      c.sub.textContent = money(p.nights * p.rate / p.guests);
     });
-    var over = Object.keys(state.picks).filter(function (id) { return state.picks[id].nights > 0 && state.picks[id].rate > CAP; }).length;
+    var over = Object.keys(state.picks).filter(function (id) { return state.picks[id].nights > 0 && state.picks[id].rate > CAP && state.picks[id].guests < 2; }).length;
     calcSummary.textContent = h.nights === 0
       ? 'No hotels selected. The Hotels row uses its manual Estimated figure.'
-      : h.nights + ' nights selected, ' + money(h.total) + ' per person, average ' + money(h.total / h.nights) + ' per night' + (over ? '. ' + over + ' hotel(s) above the cap.' : ', within the cap.') + ' Stay length plan: Da Nang ' + ((DEF.hotelNights || {})['Da Nang'] || 3) + ' nights, Ho Chi Minh City ' + ((DEF.hotelNights || {})['Ho Chi Minh City'] || 5) + ' nights.';
+      : h.nights + ' nights selected, ' + money(h.total) + ' per person, average ' + money(h.total / h.nights) + ' per night' + (over ? '. ' + over + ' hotel(s) above the target and not shared.' : ', within the target or shared.') + ' Stay length plan: Da Nang ' + ((DEF.hotelNights || {})['Da Nang'] || 3) + ' nights, Ho Chi Minh City ' + ((DEF.hotelNights || {})['Ho Chi Minh City'] || 5) + ' nights.';
     drawChart(items, fixed);
     persist();
   }

@@ -11,10 +11,11 @@ window.VO2_DATA.budgetFx = {
 window.VO2_DATA.budgetDefaults = {
   travellers: 1,
   hotelCapUsdPerNight: 170,
+  sharedRoomGuests: 2,
   hotelNights: { "Da Nang": 3, "Ho Chi Minh City": 5 }
 };
 window.VO2_DATA.budget = [
-  { id: "bud-hotels", category: "Hotels", qty: 8, unit: "nights", unitUsd: 120, status: "estimated", sourceUrl: null, checkedDate: "2026-11-02", image: null, imageAlt: null, linkedToHotels: true, excludeFromTotals: false, note: "Planning figure: 8 nights (Da Nang 3, HCMC 5) at an average under the USD 170 cap. Use the hotel calculator to replace it." },
+  { id: "bud-hotels", category: "Hotels", qty: 8, unit: "nights", unitUsd: 120, status: "estimated", sourceUrl: null, checkedDate: "2026-11-02", image: null, imageAlt: null, linkedToHotels: true, excludeFromTotals: false, note: "Planning figure: 8 nights (Da Nang 3, HCMC 5) at an average near the USD 170 target (Da Nang beachfront hotels above it can be shared by two). Use the hotel calculator to replace it." },
   { id: "bud-domestic-flight", category: "Domestic flight", qty: 1, unit: "ticket", unitUsd: 0, status: "proposed", sourceUrl: null, checkedDate: "2026-11-02", image: null, imageAlt: null, excludeFromTotals: false, note: "Da Nang to Ho Chi Minh City on Nov 24. Fare not researched; enter a quote." },
   { id: "bud-transfers", category: "Airport transfers", qty: 4, unit: "transfers", unitUsd: 0, status: "proposed", sourceUrl: null, checkedDate: "2026-11-02", image: null, imageAlt: null, excludeFromTotals: false, note: "Private transfers at both airports, in and out. No quotes yet." },
   { id: "bud-michelin", category: "Michelin dining", qty: 1, unit: "dinners", unitUsd: 115, status: "verified", sourceUrl: "https://anansaigon.com/booking/", checkedDate: "2026-11-02", image: null, imageAlt: null, excludeFromTotals: false, note: "Ănăn Saigon Saigon Tasting Menu food only, listed at US$115 per person on 2026-11-02. Drinks pairings extra; Check the 2027 price when booking." },

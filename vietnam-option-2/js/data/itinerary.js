@@ -10,7 +10,7 @@ window.VO2_DATA.itinerary = [
     activities: [
       { id: "a-1-1", slot: "Arrival", title: "Arrive in Da Nang", detail: "Arrival time depends on the final international flight schedule." },
       { id: "a-1-2", slot: "Transfer", title: "Private airport transfer", detail: "Proposed: pre-booked private car. Ask your hotel or a driver service for a transfer quote." },
-      { id: "a-1-3", slot: "Check-in", title: "Check in to an upscale beachfront hotel", detail: "Hotel choice open. See the hotel comparison.", linkedId: "hotel-haian-beach" },
+      { id: "a-1-3", slot: "Check-in", title: "Check in to an upscale beachfront hotel", detail: "Hotel choice open. See the hotel comparison.", linkedId: "hotel-hyatt-regency-danang" },
       { id: "a-1-4", slot: "Evening", title: "Welcome cocktails", detail: "Proposed: a rooftop or hotel bar to unwind after travel.", linkedId: "night-the-roof-danang" },
       { id: "a-1-5", slot: "Evening", title: "Relaxing massage or spa treatment", detail: "Proposed: book through the hotel spa. The hotel spa sets the treatment menu and price.", linkedId: null },
       { id: "a-1-6", slot: "Dinner", title: "Oceanfront dinner", detail: "Proposed: a restaurant near My Khe Beach. Choose the venue when you reserve.", linkedId: null }

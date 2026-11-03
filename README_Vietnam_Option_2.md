@@ -1,6 +1,6 @@
 # Vietnam Option 2: Key's 40th Birthday Experience
 
-A standalone luxury travel itinerary site for November 21-29, 2027 (Da Nang, then Ho Chi Minh City). The original itinerary (`vietnam_itinerary_site.html`) is untouched and linked from the nav, hero and footer.
+A standalone luxury travel itinerary site for November 21-29, 2027 (Da Nang, then Ho Chi Minh City). The original itinerary (`vietnam_itinerary_site.html`) is linked from the nav, hero and footer. It now also carries its own Flight Monitor section (additive only).
 
 Everything on the site is a proposal. Nothing is booked. Figures taken from dated guides or listings are labelled Estimated, and plans are labelled Proposed. Fields with no published value are left out of the card.
 
@@ -58,7 +58,7 @@ The flight helper reads `window.VO2_DATA.flightSearches` (in `data/itinerary.js`
 
 - Countdown to November 23, 2027, hero slides, light and dark theme, mobile menu.
 - Itinerary accordion for all nine days, with a featured birthday day.
-- Hotel filters and side-by-side comparison of up to three hotels, against the $170 per room per night cap.
+- Hotel filters and side-by-side comparison of up to three hotels, against the $170 per room per night target. Da Nang lists only verified beachfront upscale hotels; those above $170 are marked "Over $170 budget — share a room to split the cost" with a per-person split for 2 guests over 3 nights. Filters include Within budget and Shared room (over budget).
 - Dining, nightlife (with music filters), cafés and shopping, each with map links where known.
 - Wellness section with medical disclaimers.
 - Wishlist saved on the device.
@@ -79,3 +79,15 @@ All 41 photographs are from Wikimedia Commons under CC0, CC BY, CC BY-SA or publ
 ## Open items
 
 See `VERIFICATION_NEEDED_Vietnam_Option_2.md`.
+
+## Flight Monitor
+
+Daily-refreshed lowest round-trip fares per person (Economy, Business, First) from STL, with change, 30-day low and alerts. Full details: `flight-monitor/SPEC.md`.
+
+- Data source: SerpApi Google Flights. Fares the source does not return show as "not verified"; prices are never estimated.
+- Setup: copy `.env.example` to `.env`, set `SERPAPI_API_KEY`, then run `python flight-monitor/run_monitor.py`.
+- Daily schedule (Windows): `powershell -ExecutionPolicy Bypass -File flight-monitor/register_task.ps1`. The time is `schedule.time` in `flight-monitor/config.json`.
+- Other home airports: add `{ "name": ..., "home_airport": "XXX" }` entries to `travelers` in `flight-monitor/config.json`.
+- Works from disk: the runner also writes `flight-monitor/data/latest.js`, loaded by a script tag.
+- Tests: `python -m unittest discover -s flight-monitor/tests -t flight-monitor -v`.
+- On this page the Flight Monitor sits between the hero and the itinerary (nav link: Flights). The group total uses the budget traveller count and stays hidden at 1.

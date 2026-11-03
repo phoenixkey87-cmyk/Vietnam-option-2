@@ -413,6 +413,8 @@ main:focus { outline: none; }
 [data-theme="dark"] .price-box { background: rgba(201, 162, 75, 0.1); }
 .price-line { margin: 0 0 0.2rem; }
 .cap-flag { color: #8a1f1f; font-weight: 700; margin: 0.3rem 0 0; }
+.shared-flag { color: var(--emerald); font-weight: 700; margin: 0.3rem 0 0.2rem; }
+[data-theme="dark"] .shared-flag { color: var(--gold); }
 .compare-check { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.8rem; min-height: 44px; font-weight: 600; cursor: pointer; }
 .compare-check input { width: 22px; height: 22px; flex: 0 0 auto; accent-color: var(--emerald); }
 .compare-msg { min-height: 1.5em; color: #8a1f1f; font-weight: 700; margin: 0; }
@@ -481,3 +483,24 @@ main:focus { outline: none; }
 .book-pending { color: var(--muted); font-style: italic; font-size: 0.9rem; }
 .link-notice { margin-top: 0.6rem; }
 .flights-box { margin-top: 1.5rem; }
+
+/* Flight Monitor: map the shared --fm-* variables to the luxury palette (light + dark). */
+#flights {
+  --fm-surface: var(--surface);
+  --fm-text: var(--text);
+  --fm-muted: var(--muted);
+  --fm-line: var(--line);
+  --fm-accent: var(--gold-deep);
+  --fm-head-bg: var(--emerald);
+  --fm-head-text: #ffffff;
+  --fm-up: #a4262c;
+  --fm-down: #1b6b3a;
+  --fm-badge-bg: rgba(201, 162, 75, 0.16);
+}
+[data-theme="dark"] #flights {
+  --fm-accent: var(--gold);
+  --fm-head-bg: #0b4d3a;
+  --fm-up: #ff9aa0;
+  --fm-down: #7fdca0;
+  --fm-badge-bg: rgba(201, 162, 75, 0.2);
+}

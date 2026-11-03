@@ -1,63 +1,94 @@
 window.VO2_DATA = window.VO2_DATA || {};
-// Hotels. Budget cap: USD 170 per room per night, one room per traveller preferred.
-// rate.planningUsd is a PROPOSED planning figure under the cap, NOT a quote or availability check.
+// Hotels. Ho Chi Minh City: budget cap USD 170 per room per night.
+// Da Nang: only hotels verified as directly beachfront AND upscale are listed. The USD 170 cap is a SOFT cap there:
+// a Da Nang hotel above USD 170 stays as an option, labelled as a shared-room option (rate / 2 guests per person).
+// rate.planningUsd for Da Nang is a researched, dated observation (see rate.note), NOT a quote or availability check.
+// Ho Chi Minh City rates are unchanged proposed planning figures.
 // Nights: Da Nang 3 (Nov 21-24), Ho Chi Minh City 5 (Nov 24-29).
 // Photos show the area/neighbourhood (licensed Commons photos), not the hotel itself, unless stated.
 window.VO2_DATA.hotelsMeta = {
   capUsdPerNight: 170,
+  softCapCities: ["Da Nang"],
+  sharedRoom: { guests: 2, label: "Over $170 budget \u2014 share a room to split the cost" },
   nights: { "Da Nang": 3, "Ho Chi Minh City": 5 },
-  rateNote: "Planning rates are estimates under the USD 170 cap. Rates for Nov 2027 are confirmed at booking; use each hotel's booking links.",
+  rateNote: "Da Nang rates are real observations from KAYAK on 2026-11-02 (see each card), not quotes for November 2027. Ho Chi Minh City rates are planning estimates under the USD 170 cap. Confirm every rate with the hotel before booking.",
   checkedDate: "2026-11-02"
 };
 window.VO2_DATA.hotels = [
   {
-    id: "hotel-haian-beach", city: "Da Nang", name: "HAIAN Beach Hotel & Spa",
-    status: "estimated", sourceUrl: "https://www.booking.com/hotel/vn/hai-an-beach-amp-spa.html", checkedDate: "2026-11-02",
-    image: "vietnam-option-2/images/hotels/my-khe-hotels.jpg",
-    imageAlt: "Beachfront high-rise hotels along My Khe Beach in Da Nang",
-    imageNote: "Area photo of hotels along My Khe Beach; not necessarily this hotel.",
-    stars: 4, starsStatus: "reported", starsSource: "https://haian-beach-spa.hotelsdanang.com/",
-    starsNote: "4-star per a booking aggregator; the hotel's own site does not state a class.",
-    address: "278 Vo Nguyen Giap, Da Nang", neighborhood: "My Khe Beach", beachfront: true, district1: false,
-    amenities: ["Infinity rooftop pool", "Spa", "Poolside bar", "Restaurant (Ca Go, Vietnamese)", "Free bicycle rental"],
+    id: "hotel-hyatt-regency-danang", city: "Da Nang", name: "Hyatt Regency Danang Resort and Spa",
+    status: "estimated", sourceUrl: "https://www.hyatt.com/hyatt-regency/en-US/danhr-hyatt-regency-danang-resort-and-spa", checkedDate: "2026-11-02",
+    image: "vietnam-option-2/images/hotels/my-khe-coastline.jpg",
+    imageAlt: "The Da Nang coastline with sand and sea",
+    imageNote: "Coastline photo for context; not this resort.",
+    stars: 5, starsStatus: "reported", starsSource: "https://www.kayak.com/Da-Nang-Hotels-Hyatt-Regency-Danang-Resort-and-Spa.419224.ksp",
+    starsNote: "5-star per KAYAK's listing; the Hyatt page does not state a star count.",
+    address: "5 Truong Sa Street, Hoa Hai Ward, Ngu Hanh Son, Da Nang", neighborhood: "Non Nuoc Beach (south of the city)", beachfront: true, district1: false,
+    beachfrontNote: "Hyatt says the resort sits on a stretch of white sand Non Nuoc beach; Hotels.com says it sits directly on a private white sand beach; KAYAK lists a private beach. Checked 2026-11-02.",
+    beachfrontSourceUrl: "https://www.hyatt.com/hyatt-regency/en-US/danhr-hyatt-regency-danang-resort-and-spa",
+    amenities: ["Private beach", "Five pools including an infinity pool", "Spa", "Three restaurants", "Bar and lounge"],
     pool: true, spa: true,
-    amenitiesSource: "https://www.booking.com/hotel/vn/hai-an-beach-amp-spa.html",
+    amenitiesSource: "https://www.hotels.com/ho392256/hyatt-regency-danang-resort-and-spa-da-nang-vietnam/",
     distances: [
-      { to: "My Khe Beach", value: "About 1 to 5 minute walk (listings differ)", sourceUrl: "https://www.booking.com/hotel/vn/hai-an-beach-amp-spa.html" },
-      { to: "Han Market", value: null, sourceUrl: null },
-      { to: "Marble Mountains", value: null, sourceUrl: null }
+      { to: "Marble Mountains", value: "About 0.6 mi (KAYAK listing)", sourceUrl: "https://www.kayak.com/Da-Nang-Hotels-Hyatt-Regency-Danang-Resort-and-Spa.419224.ksp" },
+      { to: "Da Nang airport (DAD)", value: "About 4.8 mi (KAYAK listing)", sourceUrl: "https://www.kayak.com/Da-Nang-Hotels-Hyatt-Regency-Danang-Resort-and-Spa.419224.ksp" }
     ],
-    rate: { planningUsd: 120, status: "proposed", note: "Proposed planning figure under the USD 170 cap; no live quote." },
-    review: { score: 9.4, scale: 10, basis: "Booking.com location sub-score, not an overall score", source: "Booking.com", sourceUrl: "https://www.booking.com/hotel/vn/hai-an-beach-amp-spa.fr.html", date: "2026-11-02", status: "estimated" },
-    officialUrl: "https://haianbeachhotelspa.com/", bookingUrl: null,
+    rate: { planningUsd: 151, status: "estimated", note: "Lowest room price booked through KAYAK in the 2 weeks before 2026-11-02 (KAYAK page read 2026-11-02; KAYAK also showed $184 as the highest). Late-2026 observation, not a quote for November 2027." },
+    review: { score: 8.7, scale: 10, basis: "KAYAK rating from 3,192 verified ratings", source: "KAYAK", sourceUrl: "https://www.kayak.com/Da-Nang-Hotels-Hyatt-Regency-Danang-Resort-and-Spa.419224.ksp", date: "2026-11-02", status: "verified" },
+    officialUrl: "https://www.hyatt.com/hyatt-regency/en-US/danhr-hyatt-regency-danang-resort-and-spa", bookingUrl: null,
     bookingLinks: [
-      { kind: "inquire", via: "official", url: "https://haianbeachhotelspa.com/", check: "fetched", checkedDate: "2026-11-02", note: "Official HAIAN Beach Hotel Spa, Danang site." },
-      { kind: "book", via: "ota", otaName: "Booking.com", url: "https://www.booking.com/hotel/vn/hai-an-beach-amp-spa.html", check: "unverified-by-bot", checkedDate: "2026-11-02", note: "Booking.com blocks automated checks. Search results show this page is HAIAN Beach Hotel & Spa, 278 Vo Nguyen Giap, Da Nang." }
+      { kind: "book", via: "official", url: "https://www.hyatt.com/hyatt-regency/en-US/danhr-hyatt-regency-danang-resort-and-spa", check: "search-result", checkedDate: "2026-11-02", note: "Official Hyatt page for this resort. Enter the Nov 21-24, 2027 dates there." }
     ]
   },
   {
-    id: "hotel-tms-danang-beach", city: "Da Nang", name: "TMS Hotel Da Nang Beach",
-    status: "verified", sourceUrl: "https://tmshotel.vn/", checkedDate: "2026-11-02",
-    image: "vietnam-option-2/images/hotels/my-khe-highrises.jpg",
-    imageAlt: "High-rise hotels and the shoreline of My Khe Beach, Da Nang",
-    imageNote: "Area photo of My Khe Beach; not necessarily this hotel.",
-    stars: 5, starsStatus: "reported", starsSource: "https://tms-beach.hotelsdanang.com/",
-    starsNote: "5-star per booking aggregators; the hotel's site does not state a star class.",
-    address: "292 Vo Nguyen Giap, Da Nang", neighborhood: "My Khe Beach", beachfront: true, district1: false,
-    amenities: ["Infinity rooftop pool on the 25th floor (6:00 to 20:00 daily)", "Spa (Melange, per Hotels.com)", "Poolside bar", "Suites with balconies and ocean or partial ocean views"],
+    id: "hotel-pullman-danang-beach", city: "Da Nang", name: "Pullman Danang Beach Resort",
+    status: "estimated", sourceUrl: "https://www.pullman-danang.com/", checkedDate: "2026-11-02",
+    image: "vietnam-option-2/images/hotels/my-khe-coastline.jpg",
+    imageAlt: "The Da Nang coastline with sand and sea",
+    imageNote: "Coastline photo for context; not this resort.",
+    stars: 5, starsStatus: "verified", starsSource: "https://meetings.accor.com/hotel/8838/index.en.shtml",
+    starsNote: "Accor's own page describes 5-star services and facilities.",
+    address: "101 Vo Nguyen Giap Street, Ngu Hanh Son Ward, Da Nang", neighborhood: "Bac My An Beach", beachfront: true, district1: false,
+    beachfrontNote: "The resort's own site says it is on the white sands of Bac My An Beach; Accor's Dutch page says directly on the beach; Expedia says it sits directly on the sand. Checked 2026-11-02.",
+    beachfrontSourceUrl: "https://www.pullman-danang.com/",
+    amenities: ["Private beach", "Infinity pool", "The Nang Spa", "Two restaurants", "Sauna and jacuzzi", "Fitness centre"],
     pool: true, spa: true,
-    amenitiesSource: "https://tmshotel.vn/",
+    amenitiesSource: "https://meetings.accor.com/hotel/8838/index.en.shtml",
     distances: [
-      { to: "My Khe Beach", value: "Across the road (per guest reviews on the hotel site)", sourceUrl: "https://tmshotel.vn/" },
-      { to: "Han Market", value: "About 3.2 km", sourceUrl: "https://tms-beach.hotelsdanang.com/" },
-      { to: "Marble Mountains", value: "About 5.5 km (3.4 miles)", sourceUrl: "https://tmsbeachdanang.vn-hotel.com/en/" }
+      { to: "Da Nang city centre", value: "About 2.5 mi (KAYAK listing)", sourceUrl: "https://www.kayak.com/Da-Nang-Hotels-Pullman-Danang-Beach-Resort.399727.ksp" },
+      { to: "Marble Mountains", value: "About 2.6 mi (KAYAK listing)", sourceUrl: "https://www.kayak.com/Da-Nang-Hotels-Pullman-Danang-Beach-Resort.399727.ksp" },
+      { to: "Da Nang airport (DAD)", value: "About 3.3 mi (KAYAK listing)", sourceUrl: "https://www.kayak.com/Da-Nang-Hotels-Pullman-Danang-Beach-Resort.399727.ksp" }
     ],
-    rate: { planningUsd: 130, status: "proposed", note: "Proposed planning figure under the USD 170 cap; no live quote." },
-    observedRate: { text: "An aggregator snippet showed roughly S$105 for one night in March 2026. Single-date observation, not a quote.", sourceUrl: "https://sg.hotels.com/ho938033440/tms-hotel-da-nang-beach-da-nang-vietnam/", date: "2026-02-21", status: "estimated" },
-    review: { score: null, scale: null, basis: "Rated 'Excellent' on Tripadvisor based on 1,812 reviews (no numeric score shown)", source: "Tripadvisor (as displayed on the hotel's website)", sourceUrl: "https://tmshotel.vn/", date: "2026-11-02", status: "verified" },
-    officialUrl: "https://tmshotel.vn/", bookingUrl: null,
+    rate: { planningUsd: 128, status: "estimated", note: "Lowest room price booked through KAYAK in the 2 weeks before 2026-11-02 (KAYAK page read 2026-11-02; KAYAK also showed $205 as the highest). Late-2026 observation, not a quote for November 2027." },
+    review: { score: 9.0, scale: 10, basis: "KAYAK rating from 1,822 verified ratings", source: "KAYAK", sourceUrl: "https://www.kayak.com/Da-Nang-Hotels-Pullman-Danang-Beach-Resort.399727.ksp", date: "2026-11-02", status: "verified" },
+    officialUrl: "https://www.pullman-danang.com/", bookingUrl: null,
     bookingLinks: [
-      { kind: "book", via: "ota", otaName: "Booking.com", url: "https://www.booking.com/hotel/vn/tms-luxury-danang-beach.html", check: "unverified-by-bot", checkedDate: "2026-11-02", note: "Booking.com blocks automated checks. Search results show this page is TMS Hotel Da Nang Beach. The hotel's own site has no stable booking page to link." }
+      { kind: "book", via: "official", url: "https://www.pullman-danang.com/", check: "search-result", checkedDate: "2026-11-02", note: "Official resort site. Enter the Nov 21-24, 2027 dates there." }
+    ]
+  },
+  {
+    id: "hotel-sheraton-grand-danang", city: "Da Nang", name: "Sheraton Grand Danang Beach Resort & Spa",
+    status: "estimated", sourceUrl: "https://www.marriott.com/en-us/hotels/dadsi-sheraton-grand-danang-beach-resort-and-spa/overview/", checkedDate: "2026-11-02",
+    image: "vietnam-option-2/images/hotels/my-khe-coastline.jpg",
+    imageAlt: "The Da Nang coastline with sand and sea",
+    imageNote: "Coastline photo for context; not this resort.",
+    stars: 5, starsStatus: "reported", starsSource: "https://sheratongranddanang.5starhotels.in/",
+    starsNote: "5-star per a booking aggregator and the Da Nang tourism portal; Marriott calls it a luxury beachfront hotel.",
+    address: "35 Truong Sa Street, Ngu Hanh Son Ward, Da Nang", neighborhood: "Non Nuoc Beach (south of the city)", beachfront: true, district1: false,
+    beachfrontNote: "Marriott says the resort is perched on Non-Nuoc Beach and calls it a luxury beachfront hotel; KAYAK and Hotels.com list a private beach. Checked 2026-11-02.",
+    beachfrontSourceUrl: "https://www.marriott.com/en-us/hotels/dadsi-sheraton-grand-danang-beach-resort-and-spa/overview/",
+    amenities: ["Private beach", "Infinity pool and water slide", "Spa and steam room", "Kids club", "Water sports"],
+    pool: true, spa: true,
+    amenitiesSource: "https://www.kayak.com/Da-Nang-Hotels-Sheraton-Grand-Danang-Resort.3602259.ksp",
+    distances: [
+      { to: "Marble Mountains", value: "About 1.8 mi (KAYAK listing)", sourceUrl: "https://www.kayak.com/Da-Nang-Hotels-Sheraton-Grand-Danang-Resort.3602259.ksp" },
+      { to: "Da Nang airport (DAD)", value: "About 6.7 mi (KAYAK listing)", sourceUrl: "https://www.kayak.com/Da-Nang-Hotels-Sheraton-Grand-Danang-Resort.3602259.ksp" }
+    ],
+    rate: { planningUsd: 137, status: "estimated", note: "Lowest room price booked through KAYAK in the 2 weeks before 2026-11-02 (KAYAK page read 2026-11-02; the highest shown was also $137). Late-2026 observation, not a quote for November 2027." },
+    review: { score: 8.9, scale: 10, basis: "KAYAK rating from 1,105 verified ratings", source: "KAYAK", sourceUrl: "https://www.kayak.com/Da-Nang-Hotels-Sheraton-Grand-Danang-Resort.3602259.ksp", date: "2026-11-02", status: "verified" },
+    officialUrl: "https://www.marriott.com/en-us/hotels/dadsi-sheraton-grand-danang-beach-resort-and-spa/overview/", bookingUrl: null,
+    bookingLinks: [
+      { kind: "book", via: "official", url: "https://www.marriott.com/en-us/hotels/dadsi-sheraton-grand-danang-beach-resort-and-spa/overview/", check: "search-result", checkedDate: "2026-11-02", note: "Official Marriott page for this resort. Enter the Nov 21-24, 2027 dates there." }
     ]
   },
   {
@@ -68,16 +99,18 @@ window.VO2_DATA.hotels = [
     imageNote: "Coastline photo for context; not this resort.",
     stars: 5, starsStatus: "reported", starsSource: "https://fusionandvillas.5starhotels.in/",
     starsNote: "5-star per booking aggregator listings; the official Fusion page does not state a star class.",
-    address: "Along the coast between central Da Nang and Hoi An", neighborhood: "Non Nuoc coast (south of the city)", beachfront: true, district1: false,
-    amenities: ["Wellness-inclusive concept (per official site)", "Daily yoga and meditation classes", "Spa (Maia Spa)", "Beach access"],
+    address: "Truong Sa Street, Ngu Hanh Son Ward, Da Nang", neighborhood: "Non Nuoc coast (south of the city)", beachfront: true, district1: false,
+    beachfrontNote: "Fusion's site places the resort on the coastline between central Da Nang and Hoi An; KAYAK describes a private white sand beach; Expedia says the resort sits on a bluff looking out over Non Nuoc Beach. Checked 2026-11-02.",
+    beachfrontSourceUrl: "https://fusionresorts.com/danang/",
+    amenities: ["Wellness-inclusive concept (per official site)", "Spa (Maia Spa)", "Daily yoga and meditation classes", "Private beach", "Outdoor pool", "Two restaurants"],
     pool: true, spa: true,
-    amenitiesSource: "https://fusionresorts.com/danang/",
+    amenitiesSource: "https://www.kayak.com/Da-Nang-Hotels-Fusion-Resort-and-Villas-Da-Nang.9260634.ksp",
     distances: [
-      { to: "Central Da Nang", value: "Roughly 10 minutes by car (travel magazine report)", sourceUrl: "https://www.cntraveler.com/hotels/da-nang/fusion-resort-and-villas-da-nang-wellness-inclusive" },
-      { to: "Hoi An", value: "Between Da Nang and Hoi An", sourceUrl: "https://fusionresorts.com/danang/" }
+      { to: "Marble Mountains", value: "About 2.5 mi (KAYAK listing)", sourceUrl: "https://www.kayak.com/Da-Nang-Hotels-Fusion-Resort-and-Villas-Da-Nang.9260634.ksp" },
+      { to: "Da Nang airport (DAD)", value: "About 7.4 mi (KAYAK listing)", sourceUrl: "https://www.kayak.com/Da-Nang-Hotels-Fusion-Resort-and-Villas-Da-Nang.9260634.ksp" }
     ],
-    rate: { planningUsd: 150, status: "proposed", note: "Proposed planning figure; wellness-inclusive resort rates may approach the cap. Verify it fits USD 170." },
-    review: null,
+    rate: { planningUsd: 227, status: "estimated", note: "Lowest room price booked through KAYAK in the 2 weeks before 2026-11-02 (KAYAK page read 2026-11-02; KAYAK also showed $303 as the highest). Late-2026 observation, not a quote for November 2027." },
+    review: { score: 9.6, scale: 10, basis: "KAYAK rating from 373 verified ratings", source: "KAYAK", sourceUrl: "https://www.kayak.com/Da-Nang-Hotels-Fusion-Resort-and-Villas-Da-Nang.9260634.ksp", date: "2026-11-02", status: "verified" },
     officialUrl: "https://fusionresorts.com/danang/", bookingUrl: null,
     bookingLinks: [
       { kind: "book", via: "official", url: "https://villasdanang.backhotelite.com/en/bookcore/availability/fhrvdang/2027-11-21/2027-11-24/", check: "fetched", checkedDate: "2026-11-02", datesIncluded: "2027-11-21 to 2027-11-24", note: "Booking engine linked from the official Fusion page. The date path format was confirmed from the engine's own redirect; it responded for the 2027 dates, but availability must be checked there." },

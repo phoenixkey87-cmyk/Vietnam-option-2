@@ -21,3 +21,9 @@
 }
 
 @media print { .map-canvas, .budget-calc .btn { display: none !important; } .budget-input { border: 0 !important; } }
+
+/* Flight Monitor prints as a plain table. */
+@media print {
+  #flights { break-inside: avoid; }
+  #flights .fm-link { color: #000 !important; }
+}

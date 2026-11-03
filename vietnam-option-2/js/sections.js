@@ -197,12 +197,15 @@
     var cap = meta.capUsdPerNight || 170;
     var MAX_COMPARE = 3;
 
-    var state = { city: 'all', max: cap, stars: 'any', pool: false, spa: false, area: 'any' };
+    var softCities = list(meta.softCapCities);
+    var shareGuests = (meta.sharedRoom && meta.sharedRoom.guests) || 2;
+    var shareLabel = (meta.sharedRoom && meta.sharedRoom.label) || ('Over $' + cap + ' budget \u2014 share a room to split the cost');
+    var state = { city: 'all', max: Infinity, stars: 'any', pool: false, spa: false, area: 'any', budget: 'all' };
     var compare = list(VO2.load('vo2_compare', [])).filter(function (id) {
       return all.some(function (h) { return h.id === id; });
     }).slice(0, MAX_COMPARE);
 
-    body.appendChild(el('p', { cls: 'lead', text: 'Budget cap: $' + cap + ' USD per room per night, one room per traveller. Nights: Da Nang ' + meta.nights['Da Nang'] + ', Ho Chi Minh City ' + meta.nights['Ho Chi Minh City'] + '.' }));
+    body.appendChild(el('p', { cls: 'lead', text: 'Target $' + cap + ' USD per room per night. Da Nang beachfront hotels above that can be shared by ' + shareGuests + ' guests to split the cost. Nights: Da Nang ' + meta.nights['Da Nang'] + ', Ho Chi Minh City ' + meta.nights['Ho Chi Minh City'] + '.' }));
     body.appendChild(el('p', { cls: 'notice', text: meta.rateNote || 'Nightly rates are estimates. Confirm with each hotel.' }));
     body.appendChild(linkNotice());
 
@@ -214,6 +217,8 @@
       function () { return state.stars; }, function (v) { state.stars = v; render(); });
     var areaG = chipGroup('Location', [{ value: 'any', label: 'Any' }, { value: 'beach', label: 'Beachfront' }, { value: 'd1', label: 'District 1' }],
       function () { return state.area; }, function (v) { state.area = v; render(); });
+    var budgetG = chipGroup('Budget', [{ value: 'all', label: 'All' }, { value: 'within', label: 'Within budget' }, { value: 'shared', label: 'Shared room (over budget)' }],
+      function () { return state.budget; }, function (v) { state.budget = v; render(); });
     var amen = el('fieldset', { cls: 'filter-group' }, [el('legend', { text: 'Amenities' })]);
     var amenRow = el('div', { cls: 'chip-row' });
     var poolChip = toggleChip('Pool', function () { return state.pool; }, function (v) { state.pool = v; render(); });
@@ -223,21 +228,22 @@
     var priceWrap = el('div', { cls: 'filter-group' });
     priceWrap.appendChild(el('label', { text: 'Max nightly price', attrs: { for: 'hotelMaxPrice' } }));
     var priceSel = el('select', { cls: 'select', attrs: { id: 'hotelMaxPrice' } });
+    priceSel.appendChild(el('option', { text: 'Any price', attrs: { value: 'any' } }));
     [cap, 150, 120, 100].forEach(function (v) {
-      priceSel.appendChild(el('option', { text: 'Up to $' + v + ' per night' + (v === cap ? ' (cap)' : ''), attrs: { value: String(v) } }));
+      priceSel.appendChild(el('option', { text: 'Up to $' + v + ' per night' + (v === cap ? ' (target)' : ''), attrs: { value: String(v) } }));
     });
-    priceSel.addEventListener('change', function () { state.max = Number(priceSel.value); render(); });
+    priceSel.addEventListener('change', function () { state.max = priceSel.value === 'any' ? Infinity : Number(priceSel.value); render(); });
     priceWrap.appendChild(priceSel);
 
     var resetBtn = el('button', { cls: 'btn btn-outline', text: 'Reset filters', attrs: { type: 'button' } });
     resetBtn.addEventListener('click', function () {
-      state = { city: 'all', max: cap, stars: 'any', pool: false, spa: false, area: 'any' };
-      priceSel.value = String(cap);
-      [cityG, starsG, areaG].forEach(function (g) { g.sync(); });
+      state = { city: 'all', max: Infinity, stars: 'any', pool: false, spa: false, area: 'any', budget: 'all' };
+      priceSel.value = 'any';
+      [cityG, starsG, areaG, budgetG].forEach(function (g) { g.sync(); });
       poolChip.sync(); spaChip.sync();
       render();
     });
-    [cityG, priceWrap, starsG, amen, areaG].forEach(function (n) { bar.appendChild(n); });
+    [cityG, budgetG, priceWrap, starsG, amen, areaG].forEach(function (n) { bar.appendChild(n); });
     bar.appendChild(resetBtn);
     body.appendChild(bar);
 
@@ -257,10 +263,16 @@
     function nights(h) { return meta.nights[h.city] || null; }
     function totalOf(h) { var n = nightly(h), t = nights(h); return n !== null && t ? n * t : null; }
 
+    function usd2(n) { return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: n % 1 === 0 ? 0 : 2, maximumFractionDigits: 2 }).format(n); }
+    function isShared(h) { var n = nightly(h); return n !== null && n > cap && softCities.indexOf(h.city) !== -1; }
+    function perPerson(h) { var n = nightly(h), t = nights(h); return n === null ? null : { night: n / shareGuests, stay: t ? n / shareGuests * t : null }; }
+
     function matches(h) {
       if (state.city !== 'all' && h.city !== state.city) return false;
       var p = nightly(h);
       if (p !== null && p > state.max) return false;
+      if (state.budget === 'within' && p !== null && p > cap) return false;
+      if (state.budget === 'shared' && !isShared(h)) return false;
       if (state.stars !== 'any' && !(typeof h.stars === 'number' && h.stars >= Number(state.stars))) return false;
       if (state.stars === '5' && h.stars !== 5) return false;
       if (state.pool && h.pool !== true) return false;
@@ -283,7 +295,14 @@
       box.appendChild(el('p', { cls: 'price-line' }, [
         el('strong', { text: 'Total stay (' + nights(h) + ' nights): ' }), document.createTextNode(VO2.fmtUSD(t))
       ]));
-      if (over) box.appendChild(el('p', { cls: 'cap-flag', text: 'Above the $' + cap + ' per night cap' }));
+      if (isShared(h)) {
+        var pp = perPerson(h);
+        box.appendChild(el('p', { cls: 'shared-flag', text: shareLabel }));
+        box.appendChild(el('p', { cls: 'price-line' }, [
+          el('strong', { text: 'Per person sharing (' + shareGuests + ' guests): ' }),
+          document.createTextNode(usd2(pp.night) + ' per night' + (pp.stay !== null ? ', ' + usd2(pp.stay) + ' for ' + nights(h) + ' nights' : ''))
+        ]));
+      } else if (over) box.appendChild(el('p', { cls: 'cap-flag', text: 'Above the $' + cap + ' per night cap' }));
       if (h.rate.note) box.appendChild(el('p', { cls: 'fine-print', text: h.rate.note }));
       if (h.observedRate && h.observedRate.text) {
         box.appendChild(el('p', { cls: 'fine-print' }, [
@@ -318,6 +337,12 @@
       });
       return ul.children.length ? ul : null;
     }
+    function beachNode(h) {
+      if (!h.beachfrontNote) return null;
+      var node = el('span', {}, [document.createTextNode(h.beachfrontNote + ' ')]);
+      if (h.beachfrontSourceUrl) node.appendChild(extLink('View source', h.beachfrontSourceUrl));
+      return node;
+    }
     function areaText(h) { return h.beachfront ? 'Beachfront' : (h.district1 ? 'District 1' : null); }
 
     function hotelCard(h) {
@@ -328,6 +353,7 @@
       var dl = el('dl', { cls: 'facts' });
       addRow(dl, 'Star classification', starsText(h));
       if (h.starsNote) addRow(dl, 'Star note', h.starsNote);
+      addRow(dl, 'Beach access', beachNode(h));
       addRow(dl, 'Pool', triState(h.pool));
       addRow(dl, 'Spa', triState(h.spa));
       addRow(dl, 'Amenities', list(h.amenities).length ? list(h.amenities).join('; ') : null);
@@ -418,10 +444,21 @@
         var t = totalOf(h);
         return t === null ? null : VO2.fmtUSD(t) + ' for ' + nights(h) + ' nights (estimated)';
       });
-      line('Within $' + cap + ' cap', function (h) { var n = nightly(h); return n === null ? null : (n <= cap ? 'Yes (at the planning figure)' : 'No, above the cap'); });
+      line('Budget fit', function (h) {
+        var n = nightly(h);
+        if (n === null) return null;
+        if (n <= cap) return 'Within the $' + cap + ' budget';
+        return isShared(h) ? shareLabel : 'No, above the $' + cap + ' cap';
+      });
+      line('Per person if sharing', function (h) {
+        if (!isShared(h)) return null;
+        var pp = perPerson(h);
+        return usd2(pp.night) + ' per night, ' + usd2(pp.stay) + ' for ' + nights(h) + ' nights (' + shareGuests + ' guests sharing)';
+      });
       line('Pool', function (h) { return triState(h.pool); });
       line('Spa', function (h) { return triState(h.spa); });
       line('Setting', areaText);
+      line('Beach access', beachNode);
       line('Amenities', function (h) { return list(h.amenities).length ? list(h.amenities).join('; ') : null; });
       line('Distances', distNode);
       line('Guest reviews', reviewNode);

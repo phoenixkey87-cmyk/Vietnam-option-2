@@ -20,6 +20,7 @@
 </script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b3d2e'/%3E%3Ctext x='16' y='21' font-size='13' text-anchor='middle' fill='%23d4b46a' font-family='Georgia,serif'%3EVO2%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="vietnam-option-2/css/styles.css">
+<link rel="stylesheet" href="flight-monitor/ui/flight-monitor.css">
 <link rel="stylesheet" href="vietnam-option-2/css/print.css" media="print">
 </head>
 <body>
@@ -36,7 +37,8 @@
       <span class="sr-only">Menu</span>
     </button>
     <ul class="nav-links" id="navMenu">
-      <li><a href="#itinerary">Itinerary</a></li>
+      <li><a href="#flights">Flights</a></li>
+<li><a href="#itinerary">Itinerary</a></li>
       <li><a href="#hotels">Hotels</a></li>
       <li><a href="#dining">Dining</a></li>
       <li><a href="#nightlife">Nightlife</a></li>
@@ -94,6 +96,15 @@
     </div>
   </section>
 
+  <section id="flights" class="section reveal" aria-labelledby="flightsTitle">
+    <div class="container">
+      <p class="eyebrow">St. Louis to Da Nang, home from Ho Chi Minh City</p>
+      <h2 id="flightsTitle">Flight Monitor</h2>
+      <p class="lead">Lowest round-trip fares per person, checked daily. Fares the data source did not return are marked not verified, never estimated.</p>
+      <div data-flight-monitor data-itinerary="option2" data-origin="STL" data-arrive="DAD" data-depart="SGN" data-travelers-global="VO2_DATA.budgetDefaults.travellers"></div>
+    </div>
+  </section>
+
   <section id="itinerary" class="section reveal" aria-labelledby="itineraryTitle">
     <div class="container">
       <p class="eyebrow">Nine days, eight nights</p>
@@ -117,7 +128,7 @@
 
   <section id="hotels" class="section reveal" aria-labelledby="hotelsTitle">
     <div class="container">
-      <p class="eyebrow">Maximum $170 USD per room per night</p>
+      <p class="eyebrow">Target $170 USD per room per night (Da Nang beachfront may be shared)</p>
       <h2 id="hotelsTitle">Luxury Hotel Comparison</h2>
       <div class="section-body" id="hotelsBody"></div>
     </div>
@@ -230,6 +241,7 @@
 
 <noscript><p class="noscript">This site needs JavaScript for the itinerary and interactive features.</p></noscript>
 
+<script src="flight-monitor/data/latest.js"></script>
 <script src="vietnam-option-2/js/data/itinerary.js"></script>
 <script src="vietnam-option-2/js/data/hotels.js"></script>
 <script src="vietnam-option-2/js/data/dining.js"></script>
@@ -245,5 +257,6 @@
 <script src="vietnam-option-2/js/budget.js"></script>
 <script src="vietnam-option-2/js/map.js"></script>
 <script src="vietnam-option-2/js/verify.js"></script>
+<script src="flight-monitor/ui/flight-monitor.js"></script>
 </body>
 </html>

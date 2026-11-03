@@ -184,32 +184,6 @@ window.VO2_DATA.credits = [
     "modification": "Resized and recompressed to JPEG for web use."
   },
   {
-    "id": "hotels-my-khe-hotels",
-    "localPath": "vietnam-option-2/images/hotels/my-khe-hotels.jpg",
-    "title": "Hotels near My Khe Beach",
-    "commonsFile": "Hotels near My Khe Beach.jpg",
-    "author": "Christophe95",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hotels_near_My_Khe_Beach.jpg",
-    "width": 800,
-    "height": 583,
-    "modification": "Resized and recompressed to JPEG for web use."
-  },
-  {
-    "id": "hotels-my-khe-highrises",
-    "localPath": "vietnam-option-2/images/hotels/my-khe-highrises.jpg",
-    "title": "My Khe Beach Danang Highrises",
-    "commonsFile": "My Khe Beach Danang Highrises.jpg",
-    "author": "Jpatokal",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:My_Khe_Beach_Danang_Highrises.jpg",
-    "width": 800,
-    "height": 600,
-    "modification": "Resized and recompressed to JPEG for web use."
-  },
-  {
     "id": "hotels-my-khe-coastline",
     "localPath": "vietnam-option-2/images/hotels/my-khe-coastline.jpg",
     "title": "My Khe Beach Danang Coastline",
@@ -218,19 +192,6 @@ window.VO2_DATA.credits = [
     "license": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:My_Khe_Beach_Danang_Coastline.jpg",
-    "width": 800,
-    "height": 600,
-    "modification": "Resized and recompressed to JPEG for web use."
-  },
-  {
-    "id": "hotels-my-khe-beach-14",
-    "localPath": "vietnam-option-2/images/hotels/my-khe-beach-14.jpg",
-    "title": "My Khe Beach 14",
-    "commonsFile": "My Khe Beach 14.jpg",
-    "author": "Christophe95",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:My_Khe_Beach_14.jpg",
     "width": 800,
     "height": 600,
     "modification": "Resized and recompressed to JPEG for web use."

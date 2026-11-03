@@ -1,0 +1,45 @@
+{
+  "home_airport": "STL",
+  "alternate_origins": ["MCI", "ORD", "ATL"],
+  "provider": "serpapi",
+  "thresholds": {
+    "drop_pct": 10,
+    "shift_usd": 200,
+    "alt_origin_usd": 300,
+    "shift_days": 3,
+    "low_window_days": 30
+  },
+  "cabins_by_kind": {
+    "primary": ["economy", "business", "first"],
+    "alternate": ["economy"],
+    "traveler": ["economy"],
+    "shift": ["economy"]
+  },
+  "max_calls_per_run": 40,
+  "shift_check_interval_days": 7,
+  "schedule": { "time": "06:00" },
+  "travelers": [],
+  "travelers_example": [
+    { "name": "Example Name", "home_airport": "XXX" }
+  ],
+  "itineraries": {
+    "option2": {
+      "label": "Vietnam Option 2",
+      "arrive": "DAD",
+      "depart": "SGN",
+      "outbound_date": "2027-11-20",
+      "return_date": "2027-11-29",
+      "travelers": 1,
+      "travelers_source": "vietnam-option-2/js/data/budget.js budgetDefaults.travellers"
+    },
+    "original": {
+      "label": "Original itinerary",
+      "arrive": "HAN",
+      "depart": "SGN",
+      "outbound_date": "2027-11-20",
+      "return_date": "2027-11-29",
+      "travelers": null,
+      "travelers_source": "not stated in index.html or create_vietnam_itinerary.py"
+    }
+  }
+}
